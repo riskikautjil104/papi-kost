@@ -1,0 +1,55 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\FinanceController;
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // Users Management
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{user}', [UserController::class, 'show'])->name('show');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{user}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+        Route::get('/{user}/payment-history', [UserController::class, 'getPaymentHistory'])->name('payment-history');
+    });
+
+    // Payments Management
+    Route::prefix('payments')->name('payments.')->group(function () {
+        Route::get('/', [PaymentController::class, 'index'])->name('index');
+        Route::get('/pending', [PaymentController::class, 'pending'])->name('pending');
+        Route::get('/{payment}', [PaymentController::class, 'show'])->name('show');
+        Route::post('/{payment}/approve', [PaymentController::class, 'approve'])->name('approve');
+        Route::post('/{payment}/reject', [PaymentController::class, 'reject'])->name('reject');
+    });
+
+    // Finance Management
+    Route::prefix('finance')->name('finance.')->group(function () {
+        Route::get('/', [FinanceController::class, 'index'])->name('index');
+        Route::get('/expense/create', [FinanceController::class, 'createExpense'])->name('expense.create');
+        Route::post('/expense', [FinanceController::class, 'storeExpense'])->name('expense.store');
+        Route::delete('/expense/{expense}', [FinanceController::class, 'destroyExpense'])->name('expense.destroy');
+        Route::get('/report', [FinanceController::class, 'report'])->name('report');
+        Route::get('/report/pdf', [FinanceController::class, 'exportPdf'])->name('report.pdf');
+        Route::get('/report/excel', [FinanceController::class, 'exportExcel'])->name('report.excel');
+    });
+
+    // Settings
+    Route::get('/settings', function () {
+        return view('admin.settings');
+    })->name('settings');
+});
