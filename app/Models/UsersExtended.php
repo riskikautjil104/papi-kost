@@ -22,13 +22,19 @@ class UsersExtended extends Model
         'status',
         'address',
         'emergency_contact',
-        'notes'
+        'notes',
+        'email_notification',
+        'payment_due_date',
+        'last_notification_sent'
     ];
 
     protected $casts = [
         'monthly_fee' => 'decimal:2',
         'join_date' => 'date',
-        'contract_end_date' => 'date'
+        'contract_end_date' => 'date',
+        'email_notification' => 'boolean',
+        'payment_due_date' => 'integer',
+        'last_notification_sent' => 'datetime'
     ];
 
     public function user(): BelongsTo

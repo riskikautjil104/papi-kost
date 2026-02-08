@@ -14,15 +14,15 @@ use App\Http\Controllers\HomeController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Redirect dashboard based on user role
-// Route::get('/dashboard', function () {
-//     if (auth()->check()) {
-//         if (auth()->user()->is_admin) {
-//             return redirect()->route('admin.dashboard');
-//         }
-//         return redirect()->route('user.dashboard');
-//     }
-//     return redirect()->route('login');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    if (auth()->check()) {
+        if (auth()->user()->is_admin) {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('user.dashboard');
+    }
+    return redirect()->route('login');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 // Auth routes (login, register, etc.)
 require __DIR__ . '/auth.php';

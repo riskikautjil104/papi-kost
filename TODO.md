@@ -53,7 +53,14 @@
 - [x] Dashboard home dengan ringkasan
 - [x] Halaman tunggakan per user
 - [x] Chart statistik (Chart.js)
-- [ ] Notifikasi pembayaran
+- [x] Notifikasi pembayaran (Email - tiap pagi jam 7 WIT)
+
+## 📧 Email Notification System
+- [x] Migration kolom notifikasi
+- [x] Notification Class (PaymentReminderNotification)
+- [x] Artisan Command (payment:send-reminders)
+- [x] Scheduler (jam 7 pagi WIT otomatis)
+- [x] Test mode (--test flag)
 
 ---
 
@@ -74,4 +81,3 @@
 
 ### Pending ⏳
 1. Export PDF reports
-2. Notifikasi pembayaran
