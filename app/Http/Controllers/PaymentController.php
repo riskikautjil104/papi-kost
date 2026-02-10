@@ -15,7 +15,7 @@ class PaymentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = PaymentProof::with(['userExtended' => function($q) {
+        $query = PaymentProof::with(['userExtended' => function ($q) {
             $q->with('user');
         }]);
 
@@ -54,7 +54,7 @@ class PaymentController extends Controller
 
     public function pending()
     {
-        $pendingPayments = PaymentProof::with(['userExtended' => function($q) {
+        $pendingPayments = PaymentProof::with(['userExtended' => function ($q) {
             $q->with('user');
         }])
             ->where('status', 'pending')
@@ -110,10 +110,10 @@ class PaymentController extends Controller
 
     public function show(PaymentProof $payment)
     {
-        $payment->load(['userExtended' => function($query) {
+        $payment->load(['userExtended' => function ($query) {
             $query->with('user');
         }, 'approver']);
-        
+
         return view('admin.payments.show', compact('payment'));
     }
 
@@ -176,7 +176,7 @@ class PaymentController extends Controller
         // Check if total payments would exceed monthly fee
         $totalPaid = $user->getTotalPaidForMonth($request->month, $request->year);
         $remaining = $user->monthly_fee - $totalPaid;
-        
+
         if ($request->amount > $remaining) {
             return back()->withErrors(['amount' => "Jumlah pembayaran melebihi sisa yang harus dibayar (Rp " . number_format($remaining, 0, ',', '.') . ")"]);
         }
