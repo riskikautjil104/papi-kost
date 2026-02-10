@@ -614,6 +614,46 @@
                 @endforeach
             </div>
         </section>
+         <!-- Room Details -->
+        <section class="room-details animate-on-scroll" id="rooms" style="padding: 80px 0;">
+            <h2 style="text-align: center; font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin-bottom: 60px; color: var(--light-blue); text-transform: uppercase; letter-spacing: 2px;">Detail Kamar dan User</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
+                @forelse($rooms as $room)
+                <div style="background: rgba(0, 31, 63, 0.6); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 2px solid rgba(0, 168, 255, 0.2);">
+                    <h3 style="color: var(--accent-cyan); margin-bottom: 20px; font-size: 1.5rem;">Kamar {{ $room['room_number'] }}</h3>
+                    <div style="space-y: 15px;">
+                        @forelse($room['occupants'] as $occupant)
+                        <div style="background: rgba(0, 102, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(0, 168, 255, 0.2); display: flex; align-items: center; gap: 15px;">
+                            @if(!empty($occupant['profile_photo_url']))
+                                <img src="{{ $occupant['profile_photo_url'] }}" 
+                                     alt="{{ $occupant['name'] }}" 
+                                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-cyan);">
+                            @else
+                                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-blue), var(--light-blue)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; color: var(--text-white); border: 2px solid var(--accent-cyan);">
+                                    {{ substr($occupant['name'], 0, 1) }}
+                                </div>
+                            @endif
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: var(--text-white); margin-bottom: 5px;">{{ $occupant['name'] }}</div>
+                                <div style="color: var(--text-gray); font-size: 0.9rem;">
+                                    <i class="fas fa-phone" style="margin-right: 5px;"></i>{{ $occupant['phone'] }}<br>
+                                    <i class="fas fa-calendar" style="margin-right: 5px;"></i>Bergabung: {{ $occupant['join_date'] }}
+                                </div>
+                            </div>
+                        </div>
+                        @empty
+                        <div style="color: var(--text-gray); font-style: italic;">Tidak ada penghuni</div>
+                        @endforelse
+                    </div>
+                </div>
+                @empty
+                <div style="background: rgba(0, 31, 63, 0.6); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 2px solid rgba(0, 168, 255, 0.2); text-align: center; grid-column: 1 / -1;">
+                    <i class="fas fa-home" style="font-size: 3rem; color: var(--text-gray); margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--text-gray);">Belum ada kamar terdaftar</h3>
+                </div>
+                @endforelse
+            </div>
+        </section>
 
         <!-- Cara Kerja -->
         <section class="payment-methods animate-on-scroll" id="payment">
@@ -719,46 +759,7 @@
             </div>
         </section>
 
-        <!-- Room Details -->
-        <section class="room-details animate-on-scroll" id="rooms" style="padding: 80px 0;">
-            <h2 style="text-align: center; font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin-bottom: 60px; color: var(--light-blue); text-transform: uppercase; letter-spacing: 2px;">Detail Kamar</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
-                @forelse($rooms as $room)
-                <div style="background: rgba(0, 31, 63, 0.6); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 2px solid rgba(0, 168, 255, 0.2);">
-                    <h3 style="color: var(--accent-cyan); margin-bottom: 20px; font-size: 1.5rem;">Kamar {{ $room['room_number'] }}</h3>
-                    <div style="space-y: 15px;">
-                        @forelse($room['occupants'] as $occupant)
-                        <div style="background: rgba(0, 102, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(0, 168, 255, 0.2); display: flex; align-items: center; gap: 15px;">
-                            @if(!empty($occupant['profile_photo_url']))
-                                <img src="{{ $occupant['profile_photo_url'] }}" 
-                                     alt="{{ $occupant['name'] }}" 
-                                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-cyan);">
-                            @else
-                                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-blue), var(--light-blue)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; color: var(--text-white); border: 2px solid var(--accent-cyan);">
-                                    {{ substr($occupant['name'], 0, 1) }}
-                                </div>
-                            @endif
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600; color: var(--text-white); margin-bottom: 5px;">{{ $occupant['name'] }}</div>
-                                <div style="color: var(--text-gray); font-size: 0.9rem;">
-                                    <i class="fas fa-phone" style="margin-right: 5px;"></i>{{ $occupant['phone'] }}<br>
-                                    <i class="fas fa-calendar" style="margin-right: 5px;"></i>Bergabung: {{ $occupant['join_date'] }}
-                                </div>
-                            </div>
-                        </div>
-                        @empty
-                        <div style="color: var(--text-gray); font-style: italic;">Tidak ada penghuni</div>
-                        @endforelse
-                    </div>
-                </div>
-                @empty
-                <div style="background: rgba(0, 31, 63, 0.6); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 2px solid rgba(0, 168, 255, 0.2); text-align: center; grid-column: 1 / -1;">
-                    <i class="fas fa-home" style="font-size: 3rem; color: var(--text-gray); margin-bottom: 20px;"></i>
-                    <h3 style="color: var(--text-gray);">Belum ada kamar terdaftar</h3>
-                </div>
-                @endforelse
-            </div>
-        </section>
+       
 
         <!-- Footer -->
         <footer id="contact">
