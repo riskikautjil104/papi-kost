@@ -1,0 +1,382 @@
+================================================================================
+  D-TECT - PANDUAN SETUP NOTIFIKASI WHATSAPP GRUP
+  Menggunakan WAHA (WhatsApp HTTP API) - Gratis & Self-hosted
+================================================================================
+
+DAFTAR ISI:
+  1. Tentang
+  2. Prasyarat
+  3. Instalasi WAHA (Docker)
+  4. Start Session & Scan QR Code
+  5. Cari Group ID
+  6. Konfigurasi .env Laravel
+  7. Clear Cache
+  8. Testing
+  9. Fitur Notifikasi
+  10. Troubleshooting
+  11. Perintah Berguna
+  12. Catatan Penting
+
+================================================================================
+1. TENTANG
+================================================================================
+
+Fitur ini mengirim notifikasi otomatis ke grup WhatsApp setiap kali:
+  - User upload bukti pembayaran (status: pending)
+  - Admin menyetujui pembayaran (status: approved)
+  - Admin menolak pembayaran (status: rejected)
+  - Admin mencatat pengeluaran baru (expense)
+  - Auto-reminder H-2/H-3 sebelum jatuh tempo pembayaran
+
+Menggunakan WAHA (https://waha.devlike.pro) - open source, gratis, unlimited.
+
+================================================================================
+2. PRASYARAT
+================================================================================
+
+  - Docker Desktop sudah terinstall dan berjalan
+  - Nomor WhatsApp aktif (untuk dijadikan bot)
+  - Grup WhatsApp yang akan menerima notifikasi
+
+================================================================================
+3. INSTALASI WAHA (Docker)
+================================================================================
+
+Jalankan perintah berikut di terminal:
+
+  docker run -d --name waha -p 3000:3000 \
+    --platform linux/amd64 \
+    -e "WAHA_API_KEY=dtect2026" \
+    -e "WAHA_DASHBOARD_USERNAME=admin" \
+    -e "WAHA_DASHBOARD_PASSWORD=admin123" \
+    -e "WHATSAPP_DEFAULT_ENGINE=NOWEB" \
+    devlikeapro/waha
+
+Keterangan:
+  - Port 3000        : Port WAHA API
+  - WAHA_API_KEY     : API key untuk autentikasi (ganti sesuai keinginan)
+  - WAHA_DASHBOARD_* : Login dashboard web (http://localhost:3000/dashboard)
+  - NOWEB engine     : Lebih ringan dan cepat, cocok untuk Apple Silicon (ARM)
+
+================================================================================
+4. START SESSION & SCAN QR CODE
+================================================================================
+
+Langkah 1 - Buat & start session:
+
+  curl -s -X POST \
+    -H "X-Api-Key: dtect2026" \
+    -H "Content-Type: application/json" \
+    http://localhost:3000/api/sessions \
+    -d '{"name":"default","start":true}'
+
+Langkah 2 - Tunggu sampai status SCAN_QR_CODE (± 5 detik):
+
+  curl -s -H "X-Api-Key: dtect2026" \
+    http://localhost:3000/api/sessions/default
+
+Langkah 3 - Generate QR code:
+
+  curl -s -H "X-Api-Key: dtect2026" \
+    "http://localhost:3000/api/default/auth/qr?format=image" \
+    -o /tmp/waha-qr.png && open /tmp/waha-qr.png
+
+Langkah 4 - Scan QR code:
+  - Buka WhatsApp di HP
+  - Settings → Linked Devices → Link a Device
+  - Arahkan kamera ke QR code
+  - QR hanya valid ± 20 detik, generate ulang jika expired
+
+Langkah 5 - Verifikasi status WORKING:
+
+  curl -s -H "X-Api-Key: dtect2026" \
+    http://localhost:3000/api/sessions/default
+
+  Jika berhasil, status = "WORKING" dan field "me" berisi nomor WA.
+
+================================================================================
+5. CARI GROUP ID
+================================================================================
+
+Sebelum bisa list grup, update session agar enable store:
+
+  curl -s -X PUT \
+    -H "X-Api-Key: dtect2026" \
+    -H "Content-Type: application/json" \
+    http://localhost:3000/api/sessions/default \
+    -d '{"config":{"noweb":{"store":{"enabled":true,"fullSync":true}}}}'
+
+Tunggu ± 10 detik agar sync, lalu list semua grup:
+
+  curl -s -H "X-Api-Key: dtect2026" \
+    "http://localhost:3000/api/default/chats"
+
+Cari grup yang diinginkan, catat ID-nya (format: 120363xxxxx@g.us)
+
+================================================================================
+6. KONFIGURASI .env LARAVEL
+================================================================================
+
+Tambahkan/ubah di file .env:
+
+  # WhatsApp Notification (WAHA - Free & Self-hosted)
+  WAHA_ENABLED=true
+  WAHA_API_URL=http://localhost:3000
+  WAHA_API_KEY=dtect2026
+  WAHA_SESSION=default
+  WAHA_GROUP_ID=120363xxxxx@g.us
+
+Ganti WAHA_GROUP_ID dengan ID grup WA yang didapat dari langkah 5.
+
+================================================================================
+7. CLEAR CACHE
+================================================================================
+
+Setelah mengubah .env, WAJIB clear cache:
+
+  php artisan config:clear
+  php artisan cache:clear
+
+================================================================================
+8. TESTING
+================================================================================
+
+Test via terminal (curl langsung ke WAHA):
+
+  curl -s -X POST \
+    -H "X-Api-Key: dtect2026" \
+    -H "Content-Type: application/json" \
+    http://localhost:3000/api/sendText \
+    -d '{"chatId":"GROUP_ID_DISINI@g.us","text":"Test notifikasi D-Tect ✅","session":"default"}'
+
+Test via Laravel (tinker):
+
+  php artisan tinker --execute="
+    \$wa = new \App\Services\WhatsAppService();
+    \$result = \$wa->sendPaymentNotification('Test User', 'A1', 500000, 'Februari', 2026, 'transfer', null);
+    echo \$result ? 'SENT' : 'FAILED';
+  "
+
+Test via web app:
+  - Login sebagai user
+  - Upload bukti pembayaran → cek grup WA, harusnya ada notifikasi
+  - Login sebagai admin → approve/reject → cek grup WA lagi
+
+================================================================================
+9. FITUR NOTIFIKASI
+================================================================================
+
+A. User Upload Bukti Bayar → Notifikasi ke grup:
+
+    💰 *PEMBAYARAN BARU*
+    ━━━━━━━━━━━━━━━━━━━
+    👤 Nama: Rizki Ibrahim
+    🏠 Kamar: A1
+    💵 Jumlah: Rp 500.000
+    📅 Periode: Februari 2026
+    💳 Metode: Transfer Bank
+    📌 Status: ⏳ Menunggu Persetujuan
+    ━━━━━━━━━━━━━━━━━━━
+    + Gambar bukti bayar (jika ada)
+
+B. Admin Approve → Notifikasi ke grup:
+
+    ✅ *PEMBAYARAN DISETUJUI*
+    ━━━━━━━━━━━━━━━━━━━
+    👤 Nama: Rizki Ibrahim
+    🏠 Kamar: A1
+    💵 Jumlah: Rp 500.000
+    📅 Periode: Februari 2026
+    📌 Status: ✅ Disetujui
+
+C. Admin Reject → Notifikasi ke grup:
+
+    ❌ *PEMBAYARAN DITOLAK*
+    ━━━━━━━━━━━━━━━━━━━
+    👤 Nama: Rizki Ibrahim
+    🏠 Kamar: A1
+    💵 Jumlah: Rp 500.000
+    📅 Periode: Februari 2026
+    📌 Status: ❌ Ditolak
+    📝 Alasan: Bukti transfer tidak jelas
+
+================================================================================
+10. TROUBLESHOOTING
+================================================================================
+
+MASALAH: Session status FAILED
+SOLUSI:
+  curl -s -X POST -H "X-Api-Key: dtect2026" \
+    http://localhost:3000/api/sessions/default/restart
+
+MASALAH: QR code expired / tidak bisa di-scan
+SOLUSI:  Generate ulang QR (lihat langkah 4 bagian 3)
+
+MASALAH: Notifikasi tidak terkirim dari web app
+SOLUSI:
+  1. Pastikan sudah clear cache: php artisan config:clear
+  2. Cek log error: tail -50 storage/logs/laravel.log
+  3. Pastikan Docker WAHA masih running: docker ps
+  4. Pastikan session masih WORKING:
+     curl -s -H "X-Api-Key: dtect2026" http://localhost:3000/api/sessions/default
+
+MASALAH: WAHA container mati / restart
+SOLUSI:
+  docker start waha
+  Lalu perlu scan QR ulang (session tidak persist secara default)
+
+MASALAH: Error "Unauthorized" di dashboard
+SOLUSI:  Akses API langsung via curl, dashboard kadang bermasalah di browser
+
+================================================================================
+11. PERINTAH BERGUNA
+================================================================================
+
+# Cek status container
+docker ps --filter name=waha
+
+# Start container (jika mati)
+docker start waha
+
+# Stop container
+docker stop waha
+
+# Hapus container (untuk reinstall)
+docker rm -f waha
+
+# Cek session status
+curl -s -H "X-Api-Key: dtect2026" http://localhost:3000/api/sessions/default
+
+# Restart session
+curl -s -X POST -H "X-Api-Key: dtect2026" \
+  http://localhost:3000/api/sessions/default/restart
+
+# Generate QR baru
+curl -s -H "X-Api-Key: dtect2026" \
+  "http://localhost:3000/api/default/auth/qr?format=image" \
+  -o /tmp/waha-qr.png && open /tmp/waha-qr.png
+
+# List semua grup
+curl -s -H "X-Api-Key: dtect2026" \
+  "http://localhost:3000/api/default/chats"
+
+# Kirim pesan test
+curl -s -X POST -H "X-Api-Key: dtect2026" \
+  -H "Content-Type: application/json" \
+  http://localhost:3000/api/sendText \
+  -d '{"chatId":"GROUP_ID@g.us","text":"Test ✅","session":"default"}'
+
+# Cek Laravel log
+tail -50 storage/logs/laravel.log | grep -i whatsapp
+
+================================================================================
+12. CATATAN PENTING
+================================================================================
+
+- WAHA gratis, open source, unlimited pesan, tanpa biaya apapun
+- Butuh Docker yang selalu running agar bot aktif
+- Jika Docker/container restart, perlu scan QR ulang
+- Notifikasi gagal TIDAK akan mengganggu proses pembayaran (dibungkus try-catch)
+- API Key bisa diganti sesuai keinginan di docker run & .env
+- Untuk production, pertimbangkan menambahkan volume Docker agar session persist:
+  docker run -d --name waha -p 3000:3000 \
+    --platform linux/amd64 \
+    -v waha_data:/app/.sessions \
+    -e "WAHA_API_KEY=dtect2026" \
+    -e "WHATSAPP_DEFAULT_ENGINE=NOWEB" \
+    devlikeapro/waha
+
+FILE TERKAIT:
+  - app/Services/WhatsAppService.php    → Service class untuk kirim WA
+  - app/Http/Controllers/PaymentController.php → Notifikasi upload/approve/reject
+  - app/Http/Controllers/FinanceController.php → Notifikasi pengeluaran
+  - app/Console/Commands/SendWhatsAppReminders.php → Auto-reminder H-2/H-3
+  - routes/console.php                  → Schedule reminder (daily 08:00 WIT)
+  - config/services.php                 → Config WAHA
+  - .env                                → Environment variables
+
+================================================================================
+13. AUTO-REMINDER PEMBAYARAN (H-2 / H-3)
+================================================================================
+
+Bot otomatis kirim reminder ke grup WA H-2 dan H-3 sebelum tanggal jatuh
+tempo pembayaran masing-masing penghuni.
+
+CARA KERJA:
+  - Scheduler jalan setiap hari jam 08:00 WIT
+  - Cek semua penghuni aktif yang payment_due_date-nya 2 atau 3 hari lagi
+  - Filter hanya yang BELUM LUNAS di bulan berjalan
+  - Kirim 1 pesan rangkuman ke grup (daftar nama + sisa bayar)
+
+CONTOH PESAN:
+  🔔 *REMINDER PEMBAYARAN IURAN*
+  ━━━━━━━━━━━━━━━━━━━
+  📅 Periode: *Februari 2026*
+  ⏰ Jatuh tempo: *Tanggal 10*
+  ━━━━━━━━━━━━━━━━━━━
+
+  Berikut penghuni yang *belum bayar/belum lunas*:
+
+  1. *John Doe* (Kamar A1)
+     Sisa: Rp 500.000
+  2. *Jane Smith* (Kamar B3)
+     Sisa: Rp 1.000.000
+
+MANUAL RUN:
+  # Normal run (cek H-2 dan H-3)
+  php artisan payment:send-wa-reminders
+
+  # Force kirim (abaikan pengecekan hari)
+  php artisan payment:send-wa-reminders --force
+
+  # Custom hari (misal H-1 dan H-5)
+  php artisan payment:send-wa-reminders --days=1,5
+
+  # Test mode (dry run, tidak kirim)
+  php artisan payment:send-wa-reminders --test
+
+CATATAN:
+  - Default reminder H-2 dan H-3 (bisa diubah via --days option)
+  - Penghuni yang sudah LUNAS otomatis di-skip
+  - Satu pesan rangkuman untuk semua yg belum bayar (bukan per-orang)
+  - payment_due_date per user di-set di admin panel (default tanggal 1)
+
+================================================================================
+14. NOTIFIKASI PENGELUARAN
+================================================================================
+
+Setiap admin mencatat pengeluaran baru (via menu Keuangan), notifikasi
+otomatis terkirim ke grup WhatsApp.
+
+CONTOH PESAN:
+  🧾 *PENGELUARAN BARU*
+  ━━━━━━━━━━━━━━━━━━━
+  📂 Kategori: *Listrik*
+  💵 Jumlah: *Rp 500.000*
+  📅 Tanggal: *10/02/2026*
+  📝 Keterangan: Bayar listrik bulan Februari
+  ━━━━━━━━━━━━━━━━━━━
+
+KATEGORI YANG TERSEDIA:
+  listrik, air, internet, kebersihan, perbaikan, perlengkapan, lainnya
+
+CATATAN:
+  - Jika ada foto bukti (receipt_image), akan dikirim juga ke grup
+  - Notifikasi gagal tidak mengganggu proses pencatatan (try-catch)
+
+================================================================================
+  Dokumentasi dibuat: 11 Februari 2026
+  Terakhir diupdate: 11 Februari 2026
+  Stack: Laravel + WAHA (Docker) + WhatsApp API
+================================================================================
+
+
+
+# Test reminder (dry run, tidak kirim)
+php artisan payment:send-wa-reminders --test
+
+# Force kirim reminder (abaikan H-2/H-3)
+php artisan payment:send-wa-reminders --force
+
+# Custom hari (misal H-1 dan H-5)
+php artisan payment:send-wa-reminders --days=1,5

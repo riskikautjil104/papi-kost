@@ -6,9 +6,11 @@ use App\Models\Expense;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Exports\FinanceReportExport;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -99,7 +101,8 @@ class FinanceController extends Controller
             $data['receipt_image'] = $request->file('receipt_image')->store('receipts', 'public');
         }
 
-        DB::transaction(function () use ($request, $data) {
+        $expense = null;
+        DB::transaction(function () use ($request, $data, &$expense) {
             // Create expense record
             $expense = Expense::create($data);
 
@@ -116,6 +119,24 @@ class FinanceController extends Controller
             // Update wallet balance
             Wallet::updateBalance($data['amount'], 'expense');
         });
+
+        // Kirim notifikasi WhatsApp ke grup
+        try {
+            $whatsapp = new WhatsAppService();
+            $receiptUrl = null;
+            if ($expense && $expense->receipt_image) {
+                $receiptUrl = asset('storage/' . $expense->receipt_image);
+            }
+            $whatsapp->sendExpenseNotification(
+                $expense->category_label ?? $request->category,
+                $request->amount,
+                date('d/m/Y', strtotime($request->expense_date)),
+                $request->description,
+                $receiptUrl
+            );
+        } catch (\Exception $e) {
+            Log::error('WhatsApp expense notification failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.finance.index')
             ->with('success', 'Pengeluaran berhasil dicatat!');

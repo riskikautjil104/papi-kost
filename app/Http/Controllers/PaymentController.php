@@ -6,9 +6,11 @@ use App\Models\PaymentProof;
 use App\Models\UsersExtended;
 use App\Models\Transaction;
 use App\Models\Wallet;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
@@ -89,6 +91,23 @@ class PaymentController extends Controller
             Wallet::updateBalance($payment->amount, 'income');
         });
 
+        // Kirim notifikasi approve ke grup WhatsApp
+        try {
+            $userName = $payment->userExtended?->user?->name ?? 'Unknown';
+            $roomNumber = $payment->userExtended?->room_number ?? '-';
+
+            $wa = new WhatsAppService();
+            $wa->sendApprovalNotification(
+                $userName,
+                $roomNumber,
+                $payment->amount,
+                $payment->month_name,
+                $payment->year
+            );
+        } catch (\Exception $e) {
+            Log::error('WhatsApp approval notification failed: ' . $e->getMessage());
+        }
+
         return redirect()->back()
             ->with('success', 'Pembayaran berhasil disetujui!');
     }
@@ -103,6 +122,24 @@ class PaymentController extends Controller
             'status' => 'rejected',
             'description' => $payment->description . "\n\nAlasan Penolakan: " . $request->rejection_reason
         ]);
+
+        // Kirim notifikasi reject ke grup WhatsApp
+        try {
+            $userName = $payment->userExtended?->user?->name ?? 'Unknown';
+            $roomNumber = $payment->userExtended?->room_number ?? '-';
+
+            $wa = new WhatsAppService();
+            $wa->sendRejectionNotification(
+                $userName,
+                $roomNumber,
+                $payment->amount,
+                $payment->month_name,
+                $payment->year,
+                $request->rejection_reason
+            );
+        } catch (\Exception $e) {
+            Log::error('WhatsApp rejection notification failed: ' . $e->getMessage());
+        }
 
         return redirect()->back()
             ->with('success', 'Pembayaran ditolak.');
@@ -197,7 +234,43 @@ class PaymentController extends Controller
             $data['proof_image'] = $request->file('proof_image')->store('payment_proofs', 'public');
         }
 
-        PaymentProof::create($data);
+        $payment = PaymentProof::create($data);
+
+        // Kirim notifikasi ke grup WhatsApp
+        try {
+            $months = [
+                1 => 'Januari',
+                2 => 'Februari',
+                3 => 'Maret',
+                4 => 'April',
+                5 => 'Mei',
+                6 => 'Juni',
+                7 => 'Juli',
+                8 => 'Agustus',
+                9 => 'September',
+                10 => 'Oktober',
+                11 => 'November',
+                12 => 'Desember'
+            ];
+
+            $proofImageUrl = null;
+            if ($payment->proof_image) {
+                $proofImageUrl = url('storage/' . $payment->proof_image);
+            }
+
+            $wa = new WhatsAppService();
+            $wa->sendPaymentNotification(
+                $user->user->name,
+                $user->room_number ?? '-',
+                $payment->amount,
+                $months[$payment->month] ?? '',
+                $payment->year,
+                $request->payment_method,
+                $proofImageUrl
+            );
+        } catch (\Exception $e) {
+            Log::error('WhatsApp notification failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('user.dashboard')
             ->with('success', 'Bukti pembayaran berhasil dikirim! Menunggu persetujuan admin.');

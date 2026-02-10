@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'waha' => [
+        'enabled' => env('WAHA_ENABLED', false),
+        'api_url' => env('WAHA_API_URL', 'http://localhost:3000'),
+        'api_key' => env('WAHA_API_KEY', ''),
+        'session' => env('WAHA_SESSION', 'default'),
+        'group_id' => env('WAHA_GROUP_ID', ''),
+    ],
+
 ];

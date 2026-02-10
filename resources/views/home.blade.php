@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D-TECT - Sistem Pembayaran Online Terpercaya</title>
+    <title>D-TECT - Sistem Manajemen Kost & Kontrakan</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -579,7 +579,13 @@
                     <li><a href="#home">Home</a></li>
                     <li><a href="#features">Fitur</a></li>
                     <li><a href="#payment">Pembayaran</a></li>
-                    <li><a href="#contact">Kontak</a></li>
+                    <li><a href="#stats">Statistik</a></li>
+                    <li><a href="#rooms">Kamar</a></li>
+                    @auth
+                        <li><a href="{{ route('dashboard') }}" style="color: var(--accent-cyan); font-weight: 600;">Dashboard</a></li>
+                    @else
+                        <li><a href="{{ route('login') }}" style="color: var(--accent-cyan); font-weight: 600;">Login</a></li>
+                    @endauth
                 </ul>
             </nav>
         </header>
@@ -587,75 +593,67 @@
         <!-- Hero Section -->
         <section class="hero" id="home">
             <h1>D-TECT Papi Kost</h1>
-            <p>Sistem manajemen Pembayaran Kost Kontrakan Dengan Rapi</p>
-            <a href="{{ route('login') }}" class="cta-button"><span>Login Sekarang</span></a>
+            <p>Sistem manajemen pembayaran kost & kontrakan yang rapi, transparan, dan otomatis. Upload bukti bayar, pantau keuangan, dan terima notifikasi langsung di WhatsApp.</p>
+            @auth
+                <a href="{{ route('dashboard') }}" class="cta-button"><span>Buka Dashboard</span></a>
+            @else
+                <a href="{{ route('login') }}" class="cta-button"><span>Login Sekarang</span></a>
+            @endauth
         </section>
 
         <!-- Features Section -->
         <section class="features animate-on-scroll" id="features">
             <h2>Fitur Unggulan</h2>
             <div class="features-grid">
+                @foreach($features as $feature)
                 <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Keamanan Maksimal</h3>
-                    <p>Dilengkapi dengan enkripsi end-to-end dan sistem verifikasi berlapis untuk melindungi setiap transaksi Anda.</p>
+                    <div class="feature-icon">{{ $feature['icon'] }}</div>
+                    <h3>{{ $feature['title'] }}</h3>
+                    <p>{{ $feature['description'] }}</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Proses Instan</h3>
-                    <p>Transaksi diproses dalam hitungan detik dengan teknologi real-time processing yang canggih.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💳</div>
-                    <h3>Multi Payment</h3>
-                    <p>Terima pembayaran dari berbagai metode: kartu kredit, e-wallet, transfer bank, dan masih banyak lagi.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Dashboard Analitik</h3>
-                    <p>Monitor semua transaksi dengan dashboard yang informatif dan laporan detail real-time.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3>Global Coverage</h3>
-                    <p>Terima pembayaran dari seluruh dunia dengan dukungan multi-currency dan multi-bahasa.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>Fraud Protection</h3>
-                    <p>Sistem deteksi fraud otomatis berbasis AI untuk mencegah transaksi mencurigakan.</p>
-                </div>
+                @endforeach
             </div>
         </section>
 
-        <!-- Payment Methods -->
+        <!-- Cara Kerja -->
         <section class="payment-methods animate-on-scroll" id="payment">
-            <h2>Metode Pembayaran</h2>
-            <div class="payment-grid">
-                <div class="payment-item">
-                    <span>💳</span>
-                    <p>Kartu Kredit</p>
+            <h2>Cara Pembayaran</h2>
+            <div class="payment-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); max-width: 1100px;">
+                <div class="payment-item" style="position: relative;">
+                    <span>1️⃣</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 8px;">🔐</div>
+                    <p style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 5px;">Login</p>
+                    <p style="font-size: 0.8rem;">Masuk ke akun kamu melalui halaman login</p>
                 </div>
-                <div class="payment-item">
-                    <span>🏦</span>
-                    <p>Transfer Bank</p>
+                <div class="payment-item" style="position: relative;">
+                    <span>2️⃣</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 8px;">💸</div>
+                    <p style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 5px;">Transfer / Bayar</p>
+                    <p style="font-size: 0.8rem;">Bayar iuran via transfer bank, e-wallet, QRIS, atau tunai</p>
                 </div>
-                <div class="payment-item">
-                    <span>📱</span>
-                    <p>E-Wallet</p>
+                <div class="payment-item" style="position: relative;">
+                    <span>3️⃣</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 8px;">📸</div>
+                    <p style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 5px;">Upload Bukti</p>
+                    <p style="font-size: 0.8rem;">Upload foto bukti pembayaran di dashboard kamu</p>
                 </div>
-                <div class="payment-item">
-                    <span>🔗</span>
-                    <p>QRIS</p>
+                <div class="payment-item" style="position: relative;">
+                    <span>4️⃣</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 8px;">✅</div>
+                    <p style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 5px;">Admin Verifikasi</p>
+                    <p style="font-size: 0.8rem;">Admin cek & approve pembayaran kamu</p>
                 </div>
-                <div class="payment-item">
-                    <span>💰</span>
-                    <p>Virtual Account</p>
+                <div class="payment-item" style="position: relative;">
+                    <span>5️⃣</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 8px;">🔔</div>
+                    <p style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 5px;">Notifikasi</p>
+                    <p style="font-size: 0.8rem;">Status dikirim otomatis ke grup WhatsApp</p>
                 </div>
-                <div class="payment-item">
-                    <span>🌏</span>
-                    <p>International</p>
-                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="color: var(--text-gray); max-width: 600px; margin: 0 auto; line-height: 1.8;">
+                    Semua proses tercatat otomatis. Kamu bisa pantau status pembayaran, riwayat, dan sisa tunggakan langsung dari dashboard.
+                </p>
             </div>
         </section>
 
@@ -766,33 +764,35 @@
         <footer id="contact">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>D-TECT</h4>
-                    <p>Platform pembayaran online terpercaya untuk bisnis modern. Kami berkomitmen memberikan layanan terbaik dengan teknologi terdepan.</p>
+                    <h4>D-TECT Papi Kost</h4>
+                    <p>Sistem manajemen pembayaran kost & kontrakan yang transparan dan mudah digunakan. Semua tercatat rapi, dari pembayaran hingga pengeluaran.</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Layanan</h4>
-                    <a href="#">Payment Gateway</a>
-                    <a href="#">Disbursement</a>
-                    <a href="#">Payment Link</a>
-                    <a href="#">Subscription</a>
+                    <h4>Fitur</h4>
+                    <a href="#features">Upload Bukti Bayar</a>
+                    <a href="#features">Approval Pembayaran</a>
+                    <a href="#features">Laporan Keuangan</a>
+                    <a href="#features">Notifikasi WhatsApp</a>
                 </div>
                 <div class="footer-section">
-                    <h4>Perusahaan</h4>
-                    <a href="#">Tentang Kami</a>
-                    <a href="#">Karir</a>
-                    <a href="#">Blog</a>
-                    <a href="#">Kontak</a>
+                    <h4>Akses</h4>
+                    @auth
+                        <a href="{{ route('dashboard') }}">Dashboard</a>
+                        <a href="{{ route('profile.edit') }}">Profil Saya</a>
+                    @else
+                        <a href="{{ route('login') }}">Login</a>
+                        <a href="{{ route('register') }}">Daftar</a>
+                    @endauth
                 </div>
                 <div class="footer-section">
-                    <h4>Dukungan</h4>
-                    <a href="#">Dokumentasi</a>
-                    <a href="#">FAQ</a>
-                    <a href="#">Support Center</a>
-                    <a href="#">Status System</a>
+                    <h4>Informasi</h4>
+                    <p>📍 Papi Kost</p>
+                    <p>📞 Hubungi Admin</p>
+                    <p>💬 Grup WhatsApp</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 D-TECT. All rights reserved. | Powered by Innovation</p>
+                <p>&copy; {{ date('Y') }} D-TECT Papi Kost. All rights reserved.</p>
             </div>
         </footer>
     </div>
@@ -814,11 +814,11 @@
             </a>
             <a href="#stats" class="bottom-nav-item" data-section="stats">
                 <div class="bottom-nav-icon">📊</div>
-                <div class="bottom-nav-label">Stats</div>
+                <div class="bottom-nav-label">Statistik</div>
             </a>
-            <a href="#contact" class="bottom-nav-item" data-section="contact">
-                <div class="bottom-nav-icon">📞</div>
-                <div class="bottom-nav-label">Kontak</div>
+            <a href="#rooms" class="bottom-nav-item" data-section="rooms">
+                <div class="bottom-nav-icon">🏠</div>
+                <div class="bottom-nav-label">Kamar</div>
             </a>
         </div>
     </nav>
