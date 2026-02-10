@@ -18,7 +18,7 @@
     <div class="col-lg-8">
         <!-- Payment Details Card -->
         <div class="card mb-4">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-file-invoice me-2"></i>Informasi Pembayaran</h5>
                 <span class="badge bg-{{ $payment->status_badge }}">
                     {{ ucfirst($payment->status) }}
@@ -109,7 +109,7 @@
         
         @if($allPayments->count() > 0)
         <div class="card mb-4">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-list me-2"></i>Semua Pembayaran {{ $payment->month_name }} {{ $payment->year }}</h5>
             </div>
             <div class="card-body">
@@ -169,7 +169,7 @@
         <!-- Proof Image -->
         @if($payment->proof_image)
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-image me-2"></i>Bukti Pembayaran</h5>
             </div>
             <div class="card-body text-center">
@@ -187,7 +187,7 @@
     <div class="col-lg-4">
         <!-- Actions Card -->
         <div class="card mb-4">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Aksi</h5>
             </div>
             <div class="card-body">
@@ -223,7 +223,7 @@
 
         <!-- User Info Card -->
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-user me-2"></i>Info Penghuni</h5>
             </div>
             <div class="card-body">

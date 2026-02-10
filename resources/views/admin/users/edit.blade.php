@@ -14,10 +14,10 @@
     </nav>
 </div>
 
-<div class="row">
-    <div class="col-lg-8">
+<div class="row g-3">
+    <div class="col-lg-8 mx-auto">
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0">Formulir Edit Penghuni</h5>
             </div>
             <div class="card-body">

@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div class="card-header bg-white d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
                     <h5 class="mb-0"><i class="fas fa-history me-2"></i>Riwayat Pembayaran</h5>
                     <a href="{{ route('user.payments.create', $user->id) }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-plus me-1"></i> Bayar
@@ -21,28 +21,28 @@
                                 <tr>
                                     <th>Periode</th>
                                     <th>Jumlah</th>
-                                    <th>Metode</th>
+                                    <th class="d-none d-md-table-cell">Metode</th>
                                     <th>Status</th>
-                                    <th>Tanggal</th>
-                                    <th>Aksi</th>
+                                    <th class="d-none d-lg-table-cell">Tanggal</th>
+                                    <th class="d-none d-sm-table-cell">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($payments as $payment)
                                 <tr>
-                                    <td>
+                                    <td class="align-middle">
                                         <span class="badge bg-info">{{ $payment->month_name }} {{ $payment->year }}</span>
                                     </td>
-                                    <td class="fw-bold text-success">
+                                    <td class="align-middle fw-bold text-success">
                                         Rp {{ number_format($payment->amount, 0, ',', '.') }}
                                     </td>
-                                    <td>
+                                    <td class="align-middle d-none d-md-table-cell">
                                         {{ ucfirst($payment->payment_method) }}
                                         @if($payment->bank_name)
                                         <small class="d-block text-muted">{{ $payment->bank_name }}</small>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="align-middle">
                                         @if($payment->isPending())
                                             <span class="badge bg-warning">Menunggu</span>
                                         @elseif($payment->isApproved())
@@ -51,10 +51,10 @@
                                             <span class="badge bg-danger">Ditolak</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="align-middle d-none d-lg-table-cell">
                                         <small>{{ $payment->created_at->format('d M Y') }}</small>
                                     </td>
-                                    <td>
+                                    <td class="align-middle d-none d-sm-table-cell">
                                         @if($payment->proof_image)
                                         <a href="{{ asset('storage/' . $payment->proof_image) }}" target="_blank" class="btn btn-sm btn-outline-info" title="Lihat Bukti">
                                             <i class="fas fa-image"></i>

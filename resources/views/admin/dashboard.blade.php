@@ -5,7 +5,7 @@
 @section('content')
 <!-- Stats Cards -->
 <div class="row g-4 mb-4">
-    <div class="col-md-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl-3">
         <div class="card stat-card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl-3">
         <div class="card stat-card success">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl-3">
         <div class="card stat-card danger">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
+    <div class="col-6 col-md-6 col-xl-3">
         <div class="card stat-card info">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -64,12 +64,12 @@
 
 <!-- Alert untuk pembayaran pending -->
 @if($pendingPayments > 0)
-<div class="alert alert-warning d-flex align-items-center mb-4">
-    <i class="fas fa-exclamation-triangle me-2"></i>
-    <div class="flex-grow-1">
+<div class="alert alert-warning d-flex align-items-center mb-4 flex-column flex-md-row">
+    <i class="fas fa-exclamation-triangle me-md-2 mb-2 mb-md-0"></i>
+    <div class="flex-grow-1 text-center text-md-start">
         <strong>{{ $pendingPayments }}</strong> pembayaran menunggu persetujuan!
     </div>
-    <a href="{{ route('admin.payments.pending') }}" class="btn btn-sm btn-warning">Review Sekarang</a>
+    <a href="{{ route('admin.payments.pending') }}" class="btn btn-sm btn-warning mt-2 mt-md-0">Review Sekarang</a>
 </div>
 @endif
 
@@ -77,7 +77,7 @@
     <!-- Tunggakan Penghuni -->
     <div class="col-lg-8">
         <div class="card table-card">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-exclamation-circle me-2"></i>Tunggakan Penghuni</h5>
                 <span class="badge bg-danger">{{ $usersWithDebt->where('is_overdue', true)->count() }} Orang</span>
             </div>
@@ -87,17 +87,17 @@
                         <thead>
                             <tr>
                                 <th>Nama Penghuni</th>
-                                <th>Kamar</th>
-                                <th>Iuran Bulanan</th>
-                                <th>Sudah Bayar</th>
+                                <th class="d-none d-lg-table-cell">Kamar</th>
+                                <th class="d-none d-md-table-cell">Iuran Bulanan</th>
+                                <th class="d-none d-xl-table-cell">Sudah Bayar</th>
                                 <th>Tunggakan</th>
-                                <th>Status</th>
+                                <th class="d-none d-md-table-cell">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($usersWithDebt->take(10) as $user)
                             <tr>
-                                <td>
+                                <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         @if($user->profile_photo_url)
                                             <img src="{{ $user->profile_photo_url }}" 
@@ -111,21 +111,21 @@
                                         @endif
                                         <div>
                                             <strong>{{ $user->user->name }}</strong>
-                                            <small class="d-block text-muted">{{ $user->user->email }}</small>
+                                            <small class="d-block text-muted d-md-none">Kamar: {{ $user->room_number ?? '-' }}</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ $user->room_number ?? '-' }}</td>
-                                <td>Rp {{ number_format($user->monthly_fee, 0, ',', '.') }}</td>
-                                <td>Rp {{ number_format($user->paid_amount, 0, ',', '.') }}</td>
-                                <td>
+                                <td class="d-none d-lg-table-cell align-middle">{{ $user->room_number ?? '-' }}</td>
+                                <td class="d-none d-md-table-cell align-middle">Rp {{ number_format($user->monthly_fee, 0, ',', '.') }}</td>
+                                <td class="d-none d-xl-table-cell align-middle">Rp {{ number_format($user->paid_amount, 0, ',', '.') }}</td>
+                                <td class="align-middle">
                                     @if($user->remaining > 0)
                                     <span class="text-danger fw-bold">Rp {{ number_format($user->remaining, 0, ',', '.') }}</span>
                                     @else
                                     <span class="text-success">Lunas</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="d-none d-md-table-cell align-middle">
                                     @if($user->is_overdue)
                                     <span class="badge bg-danger">Belum Lunas</span>
                                     @else
@@ -148,7 +148,7 @@
     <!-- Recent Payments -->
     <div class="col-lg-4">
         <div class="card table-card">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Pembayaran Terbaru</h5>
                 <a href="{{ route('admin.payments.index') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
             </div>
@@ -195,7 +195,7 @@
     <!-- Monthly Chart -->
     <div class="col-lg-8">
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-chart-area me-2"></i>Pemasukan vs Pengeluaran {{ $currentYear }}</h5>
             </div>
             <div class="card-body">
@@ -209,7 +209,7 @@
     <!-- Expense by Category -->
     <div class="col-lg-4">
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Pengeluaran per Kategori</h5>
             </div>
             <div class="card-body">
@@ -232,33 +232,37 @@
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Aksi Cepat</h5>
             </div>
             <div class="card-body">
                 <div class="row g-3">
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                         <a href="{{ route('admin.users.create') }}" class="btn btn-admin w-100 py-3">
                             <i class="fas fa-user-plus fa-2x mb-2 d-block"></i>
-                            Tambah Penghuni Baru
+                            <span class="d-none d-md-inline">Tambah Penghuni Baru</span>
+                            <span class="d-inline d-md-none small">Tambah Penghuni</span>
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                         <a href="{{ route('admin.payments.pending') }}" class="btn btn-outline-primary w-100 py-3">
                             <i class="fas fa-check-circle fa-2x mb-2 d-block"></i>
-                            Review Pembayaran
+                            <span class="d-none d-md-inline">Review Pembayaran</span>
+                            <span class="d-inline d-md-none small">Review</span>
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                         <a href="{{ route('admin.finance.expense.create') }}" class="btn btn-outline-danger w-100 py-3">
                             <i class="fas fa-minus-circle fa-2x mb-2 d-block"></i>
-                            Catat Pengeluaran
+                            <span class="d-none d-md-inline">Catat Pengeluaran</span>
+                            <span class="d-inline d-md-none small">Pengeluaran</span>
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                         <a href="{{ route('admin.finance.report') }}" class="btn btn-outline-success w-100 py-3">
                             <i class="fas fa-file-download fa-2x mb-2 d-block"></i>
-                            Export Laporan
+                            <span class="d-none d-md-inline">Export Laporan</span>
+                            <span class="d-inline d-md-none small">Export</span>
                         </a>
                     </div>
                 </div>
@@ -270,6 +274,11 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Get current theme
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = isDarkMode ? '#FFFFFF' : '#1e293b';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    
     // Monthly Chart
     const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -302,16 +311,31 @@
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'top'
+                    position: 'top',
+                    labels: {
+                        color: textColor
+                    }
                 }
             },
             scales: {
                 y: {
                     beginAtZero: true,
                     ticks: {
+                        color: textColor,
                         callback: function(value) {
                             return 'Rp ' + value.toLocaleString('id-ID');
                         }
+                    },
+                    grid: {
+                        color: gridColor
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: textColor
+                    },
+                    grid: {
+                        color: gridColor
                     }
                 }
             },
@@ -352,7 +376,10 @@
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom'
+                    position: 'bottom',
+                    labels: {
+                        color: textColor
+                    }
                 }
             },
             cutout: '60%'

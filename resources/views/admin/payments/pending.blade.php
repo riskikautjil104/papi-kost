@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="card-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
                 <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Daftar Pembayaran Pending</h5>
                 <span class="badge bg-warning">{{ $pendingPayments->total() }} Menunggu</span>
             </div>
@@ -28,50 +28,50 @@
                         <thead>
                             <tr>
                                 <th>Penghuni</th>
-                                <th>Periode</th>
+                                <th class="d-none d-lg-table-cell">Periode</th>
                                 <th>Jumlah</th>
-                                <th>Metode</th>
-                                <th>Tanggal Upload</th>
+                                <th class="d-none d-md-table-cell">Metode</th>
+                                <th class="d-none d-xl-table-cell">Tanggal Upload</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($pendingPayments as $payment)
                             <tr>
-                                <td>
+                                <td class="align-middle">
                                     <div class="d-flex align-items-center">
                                         @if($payment->userExtended?->profile_photo_url)
                                             <img src="{{ $payment->userExtended->profile_photo_url }}" 
                                                  alt="{{ $payment->userExtended?->user?->name ?? 'User' }}" 
-                                                 class="rounded-circle me-2"
+                                                 class="rounded-circle me-2 d-none d-sm-flex"
                                                  style="width: 40px; height: 40px; object-fit: cover;">
                                         @else
-                                            <div class="avatar me-2">
+                                            <div class="avatar me-2 d-none d-sm-flex">
                                                 {{ substr($payment->userExtended?->user?->name ?? 'N/A', 0, 1) }}
                                             </div>
                                         @endif
                                         <div>
                                             <strong>{{ $payment->userExtended?->user?->name ?? 'User Tidak Ditemukan' }}</strong>
-                                            <small class="d-block text-muted">{{ $payment->userExtended?->user?->email ?? '-' }}</small>
+                                            <small class="d-block text-muted d-lg-none">{{ $payment->month_name }} {{ $payment->year }}</small>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="align-middle d-none d-lg-table-cell">
                                     <span class="badge bg-info">{{ $payment->month_name }} {{ $payment->year }}</span>
                                 </td>
-                                <td class="fw-bold text-success">
+                                <td class="align-middle fw-bold text-success">
                                     Rp {{ number_format($payment->amount, 0, ',', '.') }}
                                 </td>
-                                <td>
+                                <td class="align-middle d-none d-md-table-cell">
                                     <span class="badge bg-secondary">{{ ucfirst($payment->payment_method) }}</span>
                                     @if($payment->bank_name)
                                     <small class="d-block text-muted">{{ $payment->bank_name }}</small>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="align-middle d-none d-xl-table-cell">
                                     <small>{{ $payment->created_at->format('d M Y H:i') }}</small>
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center align-middle">
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('admin.payments.show', $payment) }}" class="btn btn-sm btn-outline-info" title="Lihat Detail">
                                             <i class="fas fa-eye"></i>
@@ -94,7 +94,7 @@
                 </div>
                 
                 @if($pendingPayments->hasPages())
-                <div class="card-footer bg-white">
+                <div class="card-footer">
                     {{ $pendingPayments->links() }}
                 </div>
                 @endif

@@ -16,39 +16,45 @@
 
 <div class="container-fluid">
     <!-- Summary Cards -->
-    <div class="row g-4 mb-4">
+    <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="card stat-card success">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-white-50 mb-1">Total Pemasukan Tahun {{ $year }}</p>
-                        <h3 class="stat-value mb-0">Rp {{ number_format($annualIncome, 0, ',', '.') }}</h3>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-white-50 mb-1">Total Pemasukan <span class="d-none d-md-inline">Tahun {{ $year }}</span></p>
+                            <h3 class="stat-value mb-0">Rp {{ number_format($annualIncome, 0, ',', '.') }}</h3>
+                        </div>
+                        <i class="fas fa-arrow-up stat-icon"></i>
                     </div>
-                    <i class="fas fa-arrow-up stat-icon"></i>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="card stat-card danger">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-white-50 mb-1">Total Pengeluaran Tahun {{ $year }}</p>
-                        <h3 class="stat-value mb-0">Rp {{ number_format($annualExpense, 0, ',', '.') }}</h3>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-white-50 mb-1">Total Pengeluaran <span class="d-none d-md-inline">Tahun {{ $year }}</span></p>
+                            <h3 class="stat-value mb-0">Rp {{ number_format($annualExpense, 0, ',', '.') }}</h3>
+                        </div>
+                        <i class="fas fa-arrow-down stat-icon"></i>
                     </div>
-                    <i class="fas fa-arrow-down stat-icon"></i>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="card stat-card info">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-white-50 mb-1">Saldo Bersih Tahun {{ $year }}</p>
-                        <h3 class="stat-value mb-0">Rp {{ number_format($annualIncome - $annualExpense, 0, ',', '.') }}</h3>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-white-50 mb-1">Saldo Bersih <span class="d-none d-md-inline">Tahun {{ $year }}</span></p>
+                            <h3 class="stat-value mb-0">Rp {{ number_format($annualIncome - $annualExpense, 0, ',', '.') }}</h3>
+                        </div>
+                        <i class="fas fa-wallet stat-icon"></i>
                     </div>
-                    <i class="fas fa-wallet stat-icon"></i>
                 </div>
             </div>
         </div>
@@ -58,7 +64,7 @@
         <!-- Monthly Breakdown -->
         <div class="col-lg-8">
             <div class="card table-card">
-                <div class="card-header bg-white">
+                <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Rincian Bulanan</h5>
                 </div>
                 <div class="card-body p-0">
@@ -68,8 +74,8 @@
                                 <tr>
                                     <th>Bulan</th>
                                     <th class="text-end">Pemasukan</th>
-                                    <th class="text-end">Pengeluaran</th>
-                                    <th class="text-end">Saldo</th>
+                                    <th class="text-end d-none d-md-table-cell">Pengeluaran</th>
+                                    <th class="text-end d-none d-lg-table-cell">Saldo</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -82,10 +88,10 @@
                                 @endphp
                                 @foreach($monthlyBreakdown as $data)
                                     <tr>
-                                        <td class="fw-medium">{{ $months[$data->month] ?? 'Bulan ' . $data->month }}</td>
-                                        <td class="text-end text-success fw-bold">Rp {{ number_format($data->income, 0, ',', '.') }}</td>
-                                        <td class="text-end text-danger fw-bold">Rp {{ number_format($data->expense, 0, ',', '.') }}</td>
-                                        <td class="text-end fw-bold {{ $data->income - $data->expense >= 0 ? 'text-primary' : 'text-danger' }}">
+                                        <td class="fw-medium align-middle">{{ $months[$data->month] ?? 'Bulan ' . $data->month }}</td>
+                                        <td class="text-end text-success fw-bold align-middle">Rp {{ number_format($data->income, 0, ',', '.') }}</td>
+                                        <td class="text-end text-danger fw-bold align-middle d-none d-md-table-cell">Rp {{ number_format($data->expense, 0, ',', '.') }}</td>
+                                        <td class="text-end fw-bold align-middle d-none d-lg-table-cell {{ $data->income - $data->expense >= 0 ? 'text-primary' : 'text-danger' }}">
                                             Rp {{ number_format($data->income - $data->expense, 0, ',', '.') }}
                                         </td>
                                     </tr>
@@ -100,7 +106,7 @@
         <!-- Category Breakdown -->
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-header bg-white">
+                <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Pengeluaran per Kategori</h5>
                 </div>
                 <div class="card-body">

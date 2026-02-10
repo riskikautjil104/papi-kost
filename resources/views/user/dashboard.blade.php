@@ -76,8 +76,8 @@
 </div>
 
 <!-- Keuangan Kontrakan Stats -->
-<div class="row g-4 d-none d-lg-flex mb-4">
-    <div class="col-md-3">
+<div class="row g-4 mb-4">
+    <div class="col-6 col-md-3">
         <div class="card stat-card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -91,7 +91,7 @@
         </div>
     </div>
     
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <div class="card stat-card danger">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -105,7 +105,7 @@
         </div>
     </div>
     
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <div class="card stat-card info">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -119,7 +119,7 @@
         </div>
     </div>
     
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
         <div class="card stat-card {{ $remaining <= 0 ? 'success' : 'warning' }}">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -135,8 +135,8 @@
 </div>
 
 <!-- Personal Payment Stats -->
-<div class="row g-4 d-none d-lg-flex">
-    <div class="col-md-4">
+<div class="row g-4">
+    <div class="col-12 col-md-4">
         <div class="card stat-card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -150,7 +150,7 @@
         </div>
     </div>
     
-    <div class="col-md-4">
+    <div class="col-12 col-md-4">
         <div class="card stat-card success">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -164,7 +164,7 @@
         </div>
     </div>
     
-    <div class="col-md-4">
+    <div class="col-12 col-md-4">
         <div class="card stat-card {{ $remaining <= 0 ? 'info' : 'warning' }}">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -180,7 +180,7 @@
 </div>
 
 <div class="row g-4 mt-2 mt-lg-3">
-    <div class="col-lg-8">
+    <div class="col-12 col-lg-8">
         <div class="card">
             <div class="card-header bg-white py-3">
                 <h5 class="mb-0"><i class="fas fa-history me-2"></i>Riwayat Pembayaran</h5>
@@ -230,7 +230,7 @@
         </div>
     </div>
     
-    <div class="col-lg-4">
+    <div class="col-12 col-lg-4">
         <div class="row g-3">
             <div class="col-12">
                 <div class="card">
@@ -354,6 +354,12 @@
 
 @push('styles')
 <style>
+    /* Ensure sections are visible on mobile */
+    .col-12.col-lg-8, .col-12.col-lg-4 {
+        display: block !important;
+        width: 100%;
+    }
+    
     /* Mobile Optimizations */
     @media (max-width: 768px) {
         .page-header h1 {
@@ -408,8 +414,8 @@
         }
         
         .table-responsive {
-            margin: -1rem;
-            width: calc(100% + 2rem);
+            margin: 0 !important;
+            width: 100% !important;
         }
         
         .table {
@@ -418,6 +424,15 @@
         
         .mobile-hide {
             display: none !important;
+        }
+        
+        /* Ensure Riwayat Pembayaran section is visible on mobile */
+        .row.g-4.mt-2.mt-lg-3 {
+            margin-top: 1rem !important;
+        }
+        
+        .row.g-4.mt-2.mt-lg-3 .card {
+            margin-bottom: 1rem;
         }
     }
     

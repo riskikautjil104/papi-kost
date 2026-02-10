@@ -122,7 +122,7 @@
     <!-- Expenses List -->
     <div class="col-lg-8">
         <div class="card">
-            <div class="card-header bg-white py-3">
+            <div class="card-header py-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">
                         <i class="fas fa-list me-2"></i>
@@ -181,7 +181,7 @@
                     </table>
                 </div>
                 @if(method_exists($expenses, 'hasPages') && $expenses->hasPages())
-                <div class="card-footer bg-white border-top-0">
+                <div class="card-footer border-top-0">
                     {{ $expenses->appends(request()->query())->links() }}
                 </div>
                 @endif
@@ -195,7 +195,7 @@
             <!-- Expense Breakdown -->
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header bg-white py-3">
+                    <div class="card-header py-3">
                         <h6 class="mb-0">
                             <i class="fas fa-chart-pie me-2"></i>
                             Pengeluaran per Kategori
@@ -229,7 +229,7 @@
             <!-- Export Actions -->
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header bg-white py-3">
+                    <div class="card-header py-3">
                         <h6 class="mb-0">
                             <i class="fas fa-download me-2"></i>
                             Export Laporan
@@ -251,7 +251,7 @@
             <!-- Summary Card for Mobile -->
             <div class="col-12 d-lg-none">
                 <div class="card">
-                    <div class="card-header bg-white py-3">
+                    <div class="card-header py-3">
                         <h6 class="mb-0">
                             <i class="fas fa-info-circle me-2"></i>
                             Ringkasan
@@ -260,13 +260,13 @@
                     <div class="card-body">
                         <div class="row g-2">
                             <div class="col-6">
-                                <div class="text-center p-2 bg-light rounded">
+                                <div class="text-center p-2 bg-primary rounded">
                                     <small class="text-muted d-block">Total Items</small>
                                     <strong class="d-block fs-5">{{ $expenses->count() }}</strong>
                                 </div>
                             </div>
                             <div class="col-6">
-                                <div class="text-center p-2 bg-light rounded">
+                                <div class="text-center p-2 bg-primary rounded">
                                     <small class="text-muted d-block">Kategori</small>
                                     <strong class="d-block fs-5">{{ count($expenseByCategory) }}</strong>
                                 </div>
@@ -283,7 +283,7 @@
 <div class="row mt-3">
     <div class="col-12">
         <div class="card">
-            <div class="card-header bg-white py-3">
+            <div class="card-header py-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">
                         <i class="fas fa-chart-area me-2"></i>

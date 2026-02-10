@@ -57,7 +57,7 @@
 </div>
 
 <div class="card">
-    <div class="card-header bg-white py-3">
+    <div class="card-header py-3">
         <div class="row align-items-center">
             <div class="col-md-6 mb-2 mb-md-0">
                 <h5 class="mb-0">Daftar Pembayaran</h5>
@@ -129,7 +129,7 @@
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="border-top-0">No</th>
+                        <th class="border-top-0 d-none d-md-table-cell">No</th>
                         <th class="border-top-0">Nama Penghuni</th>
                         <th class="border-top-0 d-none d-lg-table-cell">Bulan/Tahun</th>
                         <th class="border-top-0">Jumlah</th>
@@ -142,7 +142,7 @@
                 <tbody>
                     @forelse($payments as $index => $payment)
                     <tr>
-                        <td class="align-middle">{{ $payments->firstItem() + $index }}</td>
+                        <td class="align-middle d-none d-md-table-cell">{{ $payments->firstItem() + $index }}</td>
                         <td class="align-middle">
                             <div class="d-flex align-items-center">
                                 @if($payment->userExtended?->profile_photo_url)

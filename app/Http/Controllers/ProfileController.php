@@ -45,22 +45,24 @@ class ProfileController extends Controller
                 'emergency_contact',
                 'emergency_contact_name'
             ]);
-            
+
             // Handle profile photo upload
             if ($request->hasFile('profile_photo')) {
                 // Delete old photo if exists
                 if ($user->usersExtended->profile_photo) {
                     Storage::disk('public')->delete($user->usersExtended->profile_photo);
                 }
-                
+
                 $path = $request->file('profile_photo')->store('profiles', 'public');
                 $extendedData['profile_photo'] = $path;
             }
-            
+
             $user->usersExtended->update($extendedData);
         }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // Redirect based on user role
+        $redirectRoute = $user->is_admin ? 'profile.edit' : 'user.profile';
+        return Redirect::route($redirectRoute)->with('status', 'Profil berhasil diperbarui!');
     }
 
     /**
@@ -79,12 +81,14 @@ class ProfileController extends Controller
             if ($user->usersExtended->profile_photo) {
                 Storage::disk('public')->delete($user->usersExtended->profile_photo);
             }
-            
+
             $path = $request->file('profile_photo')->store('profiles', 'public');
             $user->usersExtended->update(['profile_photo' => $path]);
         }
 
-        return Redirect::route('profile.edit')->with('status', 'Foto profil berhasil diupdate!');
+        // Redirect based on user role
+        $redirectRoute = $user->is_admin ? 'profile.edit' : 'user.profile';
+        return Redirect::route($redirectRoute)->with('status', 'Foto profil berhasil diupdate!');
     }
 
     /**
@@ -101,7 +105,9 @@ class ProfileController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return Redirect::route('profile.edit')->with('status', 'password-updated');
+        // Redirect based on user role
+        $redirectRoute = $request->user()->is_admin ? 'profile.edit' : 'user.profile';
+        return Redirect::route($redirectRoute)->with('status', 'Password berhasil diperbarui!');
     }
 
     /**

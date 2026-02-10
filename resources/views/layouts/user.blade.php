@@ -27,6 +27,36 @@
             --warning-color: #f59e0b;
             --info-color: #06b6d4;
             --sidebar-width: 260px;
+            
+            /* Light Mode Colors */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --sidebar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            --sidebar-text: rgba(255, 255, 255, 0.7);
+            --sidebar-active: rgba(79, 70, 229, 0.15);
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Dark Mode Colors */
+        [data-theme="dark"] {
+            --bg-primary: #000814;
+            --bg-secondary: #001F3F;
+            --bg-tertiary: #002F5F;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B8C5D6;
+            --text-muted: #7B8FA3;
+            --border-color: #003A6B;
+            --sidebar-bg: linear-gradient(180deg, #001F3F 0%, #000814 100%);
+            --sidebar-text: rgba(255, 255, 255, 0.85);
+            --sidebar-active: rgba(0, 168, 255, 0.15);
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            --hover-shadow: 0 8px 25px rgba(0, 168, 255, 0.2);
         }
         
         * {
@@ -37,8 +67,10 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8fafc;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         /* Desktop Sidebar */
@@ -49,8 +81,9 @@
             position: sticky;
             top: 0;
             overflow-y: auto;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            background: var(--sidebar-bg);
             box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
         }
         
         .sidebar-wrapper::-webkit-scrollbar {
@@ -71,8 +104,9 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: sticky;
             top: 0;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            background: var(--sidebar-bg);
             z-index: 10;
+            transition: background 0.3s ease;
         }
         
         .sidebar-brand h4 {
@@ -281,8 +315,14 @@
             overflow: hidden;
         }
         
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
         .table {
             margin-bottom: 0;
+            min-width: 600px;
         }
         
         .table thead th {
@@ -290,13 +330,13 @@
             border: none;
             font-weight: 600;
             color: #475569;
-            padding: 1rem;
+            padding: 0.75rem;
             font-size: 0.875rem;
             white-space: nowrap;
         }
         
         .table tbody td {
-            padding: 1rem;
+            padding: 0.75rem;
             vertical-align: middle;
             border-bottom: 1px solid #f1f5f9;
         }
@@ -455,6 +495,429 @@
                 font-size: 1.25rem;
             }
         }
+        
+        /* Dark Mode Additional Styles */
+        .sidebar-nav .nav-link {
+            color: var(--sidebar-text);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-nav .nav-link.active {
+            background: var(--sidebar-active);
+        }
+        
+        .bottom-nav {
+            background: var(--bg-secondary);
+            transition: background 0.3s ease;
+        }
+        
+        .bottom-nav-item {
+            color: var(--text-secondary);
+        }
+        
+        .main-wrapper {
+            background-color: var(--bg-primary);
+            transition: background-color 0.3s ease;
+        }
+        
+        .card {
+            background: var(--bg-secondary);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .card-header {
+            background: var(--bg-tertiary) !important;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .table-card {
+            background: var(--bg-secondary);
+            transition: background 0.3s ease;
+        }
+        
+        .table thead th {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .table tbody td {
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .table tbody tr:hover {
+            background-color: var(--bg-tertiary);
+        }
+        
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        .form-control, .form-select {
+            background: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: var(--bg-secondary);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .dropdown-menu {
+            background: var(--bg-secondary);
+            border-color: var(--border-color);
+            box-shadow: var(--card-shadow);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .dropdown-item {
+            color: var(--text-primary);
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .breadcrumb-item,
+        .breadcrumb-item a {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb-item.active {
+            color: var(--text-primary);
+        }
+        
+        .page-header h1 {
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .bg-light {
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        [data-theme="dark"] .bg-white {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        [data-theme="dark"] .text-dark {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .border {
+            border-color: var(--border-color) !important;
+        }
+        
+        .list-group-item {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .top-bar {
+            background: var(--bg-secondary);
+            box-shadow: var(--card-shadow);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .top-bar h1 {
+            color: var(--text-primary);
+        }
+        
+        /* Fix text colors in dark mode */
+        [data-theme="dark"] .text-black,
+        [data-theme="dark"] h1, 
+        [data-theme="dark"] h2, 
+        [data-theme="dark"] h3, 
+        [data-theme="dark"] h4, 
+        [data-theme="dark"] h5, 
+        [data-theme="dark"] h6,
+        [data-theme="dark"] p,
+        [data-theme="dark"] span,
+        [data-theme="dark"] label,
+        [data-theme="dark"] .fw-bold,
+        [data-theme="dark"] strong {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        [data-theme="dark"] small,
+        [data-theme="dark"] .small {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Ensure buttons have proper contrast */
+        [data-theme="dark"] .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .btn-outline-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        [data-theme="dark"] .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Alert styling in dark mode */
+        [data-theme="dark"] .alert {
+            border-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .alert-success {
+            background-color: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+        
+        [data-theme="dark"] .alert-warning {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        
+        [data-theme="dark"] .alert-danger {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        [data-theme="dark"] .alert-info {
+            background-color: rgba(6, 182, 212, 0.15);
+            color: #22d3ee;
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+        
+        /* Table styling in dark mode */
+        [data-theme="dark"] .table {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .table thead th {
+            color: var(--text-primary) !important;
+            border-color: var(--border-color);
+            background-color: var(--bg-tertiary);
+        }
+        
+        [data-theme="dark"] .table tbody td {
+            color: var(--text-primary) !important;
+            border-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .table tbody td.align-middle {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .table tbody td .fw-bold {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .table-hover tbody tr:hover {
+            background-color: var(--bg-tertiary);
+        }
+        
+        [data-theme="dark"] .table-hover tbody tr:hover td {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Text muted in dark mode */
+        [data-theme="dark"] .text-muted {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Card headers in dark mode */
+        [data-theme="dark"] .card-header.bg-white,
+        [data-theme="dark"] .card-footer.bg-white {
+            background-color: var(--bg-secondary) !important;
+            border-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .card-header h5,
+        [data-theme="dark"] .card-header h6 {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Fix Bootstrap color utilities in dark mode */
+        [data-theme="dark"] .text-success {
+            color: #4ade80 !important;
+        }
+        
+        [data-theme="dark"] .text-warning {
+            color: #fbbf24 !important;
+        }
+        
+        [data-theme="dark"] .text-danger {
+            color: #f87171 !important;
+        }
+        
+        [data-theme="dark"] .text-info {
+            color: #22d3ee !important;
+        }
+        
+        [data-theme="dark"] .text-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        /* Badges in dark mode */
+        [data-theme="dark"] .badge {
+            color: white !important;
+        }
+        
+        /* Small text elements */
+        [data-theme="dark"] small,
+        [data-theme="dark"] .small,
+        [data-theme="dark"] td small {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Button outline info in dark mode */
+        [data-theme="dark"] .btn-outline-info {
+            color: #22d3ee;
+            border-color: #22d3ee;
+        }
+        
+        [data-theme="dark"] .btn-outline-info:hover {
+            background-color: #22d3ee;
+            color: white;
+        }
+        
+        /* Breadcrumb in dark mode */
+        [data-theme="dark"] .breadcrumb-item {
+            color: var(--text-secondary);
+        }
+        
+        [data-theme="dark"] .breadcrumb-item.active {
+            color: var(--text-primary);
+        }
+        
+        /* Form elements in dark mode */
+        [data-theme="dark"] .form-select,
+        [data-theme="dark"] .form-control {
+            background-color: var(--bg-tertiary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .form-select:focus,
+        [data-theme="dark"] .form-control:focus {
+            background-color: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .form-label {
+            color: var(--text-primary);
+        }
+        
+        /* Stat cards always have white text (they have gradient backgrounds) */
+        [data-theme="dark"] .stat-card,
+        [data-theme="dark"] .stat-card p,
+        [data-theme="dark"] .stat-card h3,
+        [data-theme="dark"] .stat-card .stat-value {
+            color: white !important;
+        }
+        
+        [data-theme="dark"] .stat-card .text-white-50 {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+        
+        /* Table light header in dark mode */
+        [data-theme="dark"] .table-light {
+            background-color: var(--bg-tertiary) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .table-light th {
+            color: var(--text-primary) !important;
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        [data-theme="dark"] .table-light td {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Force all table content to be visible */
+        [data-theme="dark"] table tbody tr td {
+            color: var(--text-primary) !important;
+            background-color: transparent !important;
+        }
+        
+        [data-theme="dark"] table tbody tr:hover td {
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        [data-theme="dark"] .table tbody tr {
+            background-color: transparent !important;
+        }
+        
+        /* Page header in dark mode */
+        [data-theme="dark"] .page-header h1,
+        [data-theme="dark"] .page-header h2,
+        [data-theme="dark"] .page-header h3 {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Card body text color */
+        [data-theme="dark"] .card-body {
+            color: var(--text-primary);
+        }
+        
+        /* Avatar in dark mode */
+        [data-theme="dark"] .avatar {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        /* Ensure all text in cards is visible - but don't override layout */
+        [data-theme="dark"] .card p:not(.mb-0):not(.mb-1):not(.mb-2):not(.mb-3),
+        [data-theme="dark"] .card-body p:not(.mb-0):not(.mb-1):not(.mb-2):not(.mb-3) {
+            color: var(--text-primary);
+        }
+        
+        /* Links in dark mode */
+        [data-theme="dark"] a {
+            color: var(--primary-color);
+        }
+        
+        [data-theme="dark"] a:hover {
+            color: #5b8def;
+        }
+        
+        /* Form control option elements */
+        [data-theme="dark"] .form-select option {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
     </style>
 </head>
 <body class="user-dashboard">
@@ -515,32 +978,39 @@
                 <div class="top-bar d-flex justify-content-between align-items-center">
                     <h1>@yield('title', 'User Dashboard')</h1>
                     
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            @if(Auth::user()->usersExtended?->profile_photo_url)
-                                <img src="{{ Auth::user()->usersExtended->profile_photo_url }}" 
-                                     alt="{{ Auth::user()->name }}" 
-                                     class="rounded-circle"
-                                     style="width: 28px; height: 28px; object-fit: cover;">
-                            @else
-                                <div class="avatar d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.75rem;">
-                                    {{ substr(Auth::user()->name, 0, 1) }}
-                                </div>
-                            @endif
-                            <span>{{ Auth::user()->name ?? 'User' }}</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <!-- Dark Mode Toggle -->
+                        <button class="btn btn-outline-secondary" id="darkModeToggle" title="Toggle Dark Mode">
+                            <i class="fas fa-moon" id="darkModeIcon"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{{ route('user.profile') }}"><i class="fas fa-user me-2"></i>Profil</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST" class="m-0">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">
-                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
+                        
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                @if(Auth::user()->usersExtended?->profile_photo_url)
+                                    <img src="{{ Auth::user()->usersExtended->profile_photo_url }}" 
+                                         alt="{{ Auth::user()->name }}" 
+                                         class="rounded-circle"
+                                         style="width: 28px; height: 28px; object-fit: cover;">
+                                @else
+                                    <div class="avatar d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                                        {{ substr(Auth::user()->name, 0, 1) }}
+                                    </div>
+                                @endif
+                                <span class="d-none d-md-inline">{{ Auth::user()->name ?? 'User' }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{{ route('user.profile') }}"><i class="fas fa-user me-2"></i>Profil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 
@@ -586,8 +1056,35 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Mobile Menu Script -->
+    <!-- Dark Mode & Mobile Menu Script -->
     <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        updateDarkModeIcon(currentTheme);
+        
+        darkModeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            updateDarkModeIcon(theme);
+        });
+        
+        function updateDarkModeIcon(theme) {
+            if (theme === 'dark') {
+                darkModeIcon.classList.remove('fa-moon');
+                darkModeIcon.classList.add('fa-sun');
+            } else {
+                darkModeIcon.classList.remove('fa-sun');
+                darkModeIcon.classList.add('fa-moon');
+            }
+        }
+        
         // Mobile sidebar toggle
         const menuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.getElementById('sidebar');

@@ -14,11 +14,11 @@
     </nav>
 </div>
 
-<div class="row">
+<div class="row g-3">
     <!-- Profile Card -->
     <div class="col-lg-4">
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0">Informasi Penghuni</h5>
             </div>
             <div class="card-body text-center">
@@ -41,14 +41,14 @@
                     </span>
                 </div>
 
-                <div class="d-flex justify-content-center gap-2">
+                <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
                     <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-outline-warning btn-sm">
                         <i class="fas fa-edit me-1"></i> Edit
                     </a>
                     <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Yakin ingin menghapus penghuni ini?')">
+                        <button type="submit" class="btn btn-outline-danger btn-sm w-100" onclick="return confirm('Yakin ingin menghapus penghuni ini?')">
                             <i class="fas fa-trash me-1"></i> Hapus
                         </button>
                     </form>
@@ -95,7 +95,7 @@
     <div class="col-lg-8">
         <!-- Personal Information -->
         <div class="card">
-            <div class="card-header bg-white">
+            <div class="card-header">
                 <h5 class="mb-0">Informasi Pribadi</h5>
             </div>
             <div class="card-body">
@@ -161,7 +161,7 @@
 
         <!-- Payment History -->
         <div class="card mt-3">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Riwayat Pembayaran</h5>
                 <div class="btn-group btn-group-sm">
                     <button type="button" class="btn btn-outline-primary active" onclick="filterPayments('all')">Semua</button>

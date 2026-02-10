@@ -36,7 +36,6 @@
             --text-secondary: #64748b;
             --text-muted: #94a3b8;
             --border-color: #e2e8f0;
-            --hover-bg: #f1f5f9;
             --sidebar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             --sidebar-text: rgba(255, 255, 255, 0.7);
             --sidebar-active: rgba(79, 70, 229, 0.15);
@@ -51,12 +50,13 @@
             --bg-tertiary: #002F5F;
             --text-primary: #FFFFFF;
             --text-secondary: #B8C5D6;
-            --text-muted: #8B9DB5;
-            --border-color: #1a3a5c;
-            --hover-bg: #002F5F;
-            --sidebar-bg: linear-gradient(180deg, #000814 0%, #001020 100%);
-            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            --hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            --text-muted: #7B8FA3;
+            --border-color: #003A6B;
+            --sidebar-bg: linear-gradient(180deg, #001F3F 0%, #000814 100%);
+            --sidebar-text: rgba(255, 255, 255, 0.85);
+            --sidebar-active: rgba(0, 168, 255, 0.15);
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            --hover-shadow: 0 8px 25px rgba(0, 168, 255, 0.2);
         }
         
         * {
@@ -78,8 +78,9 @@
             width: var(--sidebar-width);
             flex-shrink: 0;
             height: 100vh;
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
             overflow-y: auto;
             background: var(--sidebar-bg);
             box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
@@ -107,11 +108,6 @@
             background: var(--sidebar-bg);
             z-index: 10;
             transition: background 0.3s ease;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 0;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-            z-index: 10;
         }
         
         .sidebar-brand h4 {
@@ -133,7 +129,7 @@
         }
         
         .sidebar-nav .nav-link {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--sidebar-text);
             padding: 0.85rem 1.5rem;
             display: flex;
             align-items: center;
@@ -152,7 +148,7 @@
         
         .sidebar-nav .nav-link.active {
             color: #fff;
-            background: rgba(79, 70, 229, 0.15);
+            background: var(--sidebar-active);
             border-left-color: var(--primary-color);
         }
         
@@ -173,10 +169,11 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #fff;
+            background: var(--bg-secondary);
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             padding: 0.5rem 0;
+            transition: background 0.3s ease;
         }
         
         .bottom-nav-item {
@@ -187,7 +184,7 @@
             justify-content: center;
             padding: 0.5rem;
             text-decoration: none;
-            color: #64748b;
+            color: var(--text-secondary);
             transition: all 0.3s ease;
             position: relative;
         }
@@ -256,9 +253,10 @@
         .main-wrapper {
             flex: 1;
             min-height: 100vh;
+            margin-left: var(--sidebar-width);
             background-color: var(--bg-primary);
             overflow-x: hidden;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, margin-left 0.3s ease;
         }
         
         .main-content {
@@ -285,128 +283,95 @@
         
         /* Cards */
         .card {
-            background: var(--bg-secondary) !important;
-            color: var(--text-primary) !important;
             border: none;
             border-radius: 12px;
+            background: var(--bg-secondary);
             box-shadow: var(--card-shadow);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
             margin-bottom: 1.5rem;
-        }
-        
-        .card-body {
-            background: var(--bg-secondary) !important;
-            color: var(--text-primary) !important;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--hover-shadow);
         }
         
         .stat-card {
-            background: linear-gradient(135deg, var(--primary-color), #818cf8) !important;
-            color: #fff !important;
+            background: linear-gradient(135deg, var(--primary-color), #818cf8);
+            color: #fff;
             border-radius: 12px;
         }
         
         .stat-card.success {
-            background: linear-gradient(135deg, #22c55e, #4ade80) !important;
+            background: linear-gradient(135deg, #22c55e, #4ade80);
         }
         
         .stat-card.danger {
-            background: linear-gradient(135deg, #ef4444, #f87171) !important;
+            background: linear-gradient(135deg, #ef4444, #f87171);
         }
         
         .stat-card.info {
-            background: linear-gradient(135deg, #06b6d4, #22d3ee) !important;
+            background: linear-gradient(135deg, #06b6d4, #22d3ee);
         }
         
         .stat-card .stat-icon {
             font-size: 2.5rem;
             opacity: 0.3;
-            color: #fff !important;
         }
         
         .stat-card .stat-value {
             font-size: 1.75rem;
             font-weight: 700;
-            color: #fff !important;
         }
         
         .stat-card .card-body {
             padding: 1.5rem;
-            background: transparent !important;
-        }
-        
-        .stat-card p,
-        .stat-card .text-white-50,
-        .stat-card h2,
-        .stat-card h3,
-        .stat-card h4,
-        .stat-card h5,
-        .stat-card i {
-            color: rgba(255, 255, 255, 0.9) !important;
-        }
-        
-        .stat-card .stat-value {
-            color: #fff !important;
         }
         
         /* Tables */
         .table-card {
-            background: var(--bg-secondary) !important;
+            background: var(--bg-secondary);
             border-radius: 12px;
             overflow: hidden;
-            transition: background-color 0.3s ease;
+            transition: background 0.3s ease;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .table {
             margin-bottom: 0;
-            color: var(--text-primary) !important;
-            background: transparent !important;
+            min-width: 600px;
         }
         
         .table thead th {
-            background: var(--bg-primary) !important;
+            background: var(--bg-tertiary);
             border: none;
             font-weight: 600;
-            color: var(--text-primary) !important;
-            padding: 1rem;
+            color: var(--text-secondary);
+            padding: 0.75rem;
             font-size: 0.875rem;
             white-space: nowrap;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        .table tbody {
-            background: var(--bg-secondary) !important;
-        }
-        
-        .table tbody tr {
-            background: var(--bg-secondary) !important;
-            transition: background-color 0.3s ease;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         
         .table tbody td {
-            padding: 1rem;
+            padding: 0.75rem;
             vertical-align: middle;
-            border-bottom: 1px solid var(--border-color) !important;
-            color: var(--text-primary) !important;
-            background: transparent !important;
-            transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease, color 0.3s ease;
         }
         
         .table tbody tr:last-child td {
-            border-bottom: none !important;
+            border-bottom: none;
         }
         
         .table tbody tr:hover {
-            background-color: var(--hover-bg) !important;
-        }
-        
-        .table tbody tr:hover td {
-            background: transparent !important;
+            background-color: var(--bg-tertiary);
+            transition: background-color 0.2s ease;
         }
         
         /* Badges */
@@ -414,38 +379,7 @@
             padding: 0.35rem 0.75rem;
             border-radius: 20px;
             font-size: 0.75rem;
-            font-weight: 600;
-            color: #fff !important;
-        }
-        
-        .badge.bg-success {
-            background-color: #22c55e !important;
-            color: #fff !important;
-        }
-        
-        .badge.bg-danger {
-            background-color: #ef4444 !important;
-            color: #fff !important;
-        }
-        
-        .badge.bg-warning {
-            background-color: #f59e0b !important;
-            color: #1e293b !important;
-        }
-        
-        .badge.bg-info {
-            background-color: #06b6d4 !important;
-            color: #fff !important;
-        }
-        
-        .badge.bg-primary {
-            background-color: var(--primary-color) !important;
-            color: #fff !important;
-        }
-        
-        .badge.bg-secondary {
-            background-color: #64748b !important;
-            color: #fff !important;
+            font-weight: 500;
         }
         
         /* Buttons */
@@ -487,40 +421,18 @@
             height: 300px;
         }
         
-        /* Card Header */
-        .card-header {
-            background: var(--bg-secondary) !important;
-            color: var(--text-primary) !important;
-            border-bottom: 1px solid var(--border-color) !important;
-            padding: 1rem 1.5rem;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
-        
-        .card-header h5 {
-            color: var(--text-primary) !important;
-            margin-bottom: 0;
-        }
-        
-        .card-header i {
-            color: var(--text-primary) !important;
-        }
-        
         /* List Group */
         .list-group-item {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
             border: none;
             border-bottom: 1px solid var(--border-color);
             padding: 1rem;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         
         .list-group-item:last-child {
             border-bottom: none;
-        }
-        
-        .list-group-item:hover {
-            background: var(--hover-bg);
         }
         
         /* Alert */
@@ -532,14 +444,22 @@
         /* Dropdown */
         .dropdown-menu {
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            border: none;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
             margin-top: 0.5rem;
+            background: var(--bg-secondary);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
         
         .dropdown-item {
             padding: 0.75rem 1.25rem;
             transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
         }
         
         .dropdown-item:hover {
@@ -548,212 +468,6 @@
         
         .dropdown-toggle::after {
             margin-left: 0.5rem;
-        }
-        
-        /* Dark Mode Specific Styles */
-        [data-theme="dark"] {
-            color-scheme: dark;
-        }
-        
-        [data-theme="dark"] .card {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        [data-theme="dark"] .card-body {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-        }
-        
-        [data-theme="dark"] .table-responsive {
-            background: transparent;
-        }
-        
-        [data-theme="dark"] .table thead th {
-            background: var(--bg-primary) !important;
-            color: var(--text-primary) !important;
-        }
-        
-        [data-theme="dark"] .table tbody td {
-            color: var(--text-primary) !important;
-            border-bottom-color: var(--border-color) !important;
-        }
-        
-        [data-theme="dark"] .table tbody tr:hover {
-            background-color: var(--hover-bg) !important;
-        }
-        
-        [data-theme="dark"] strong,
-        [data-theme="dark"] .fw-bold {
-            color: var(--text-primary) !important;
-        }
-        
-        [data-theme="dark"] small,
-        [data-theme="dark"] .small {
-            color: var(--text-secondary) !important;
-        }
-        
-        [data-theme="dark"] .text-muted {
-            color: var(--text-muted) !important;
-        }
-        
-        [data-theme="dark"] .page-header h1,
-        [data-theme="dark"] .page-header h2,
-        [data-theme="dark"] .page-header h3 {
-            color: var(--text-primary) !important;
-        }
-        
-        [data-theme="dark"] .breadcrumb {
-            background: transparent;
-        }
-        
-        [data-theme="dark"] .breadcrumb-item,
-        [data-theme="dark"] .breadcrumb-item a {
-            color: var(--text-secondary) !important;
-        }
-        
-        [data-theme="dark"] .breadcrumb-item.active {
-            color: var(--text-primary) !important;
-        }
-        
-        [data-theme="dark"] .btn-outline-primary {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        [data-theme="dark"] .btn-outline-primary:hover {
-            background: var(--primary-color);
-            color: #fff;
-        }
-        
-        [data-theme="dark"] .btn-outline-info {
-            color: var(--info-color);
-            border-color: var(--info-color);
-        }
-        
-        [data-theme="dark"] .btn-outline-info:hover {
-            background: var(--info-color);
-            color: #fff;
-        }
-        
-        [data-theme="dark"] .btn-outline-danger {
-            color: var(--danger-color);
-            border-color: var(--danger-color);
-        }
-        
-        [data-theme="dark"] .btn-outline-danger:hover {
-            background: var(--danger-color);
-            color: #fff;
-        }
-        
-        [data-theme="dark"] .btn-outline-success {
-            color: var(--success-color);
-            border-color: var(--success-color);
-        }
-        
-        [data-theme="dark"] .btn-outline-success:hover {
-            background: var(--success-color);
-            color: #fff;
-        }
-        
-        [data-theme="dark"] .modal-content {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-        }
-        
-        [data-theme="dark"] .modal-header {
-            background: var(--bg-primary);
-            border-bottom-color: var(--border-color);
-        }
-        
-        [data-theme="dark"] .modal-footer {
-            border-top-color: var(--border-color);
-        }
-        
-        [data-theme="dark"] .btn-close {
-            filter: invert(1);
-        }
-        
-        [data-theme="dark"] .dropdown-menu {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-        }
-        
-        [data-theme="dark"] .dropdown-item {
-            color: var(--text-primary);
-        }
-        
-        [data-theme="dark"] .dropdown-item:hover {
-            background: var(--hover-bg);
-        }
-        
-        [data-theme="dark"] .btn-outline-secondary {
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-        
-        [data-theme="dark"] .btn-outline-secondary:hover {
-            background: var(--hover-bg);
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-        
-        [data-theme="dark"] .form-control,
-        [data-theme="dark"] .form-select {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-        
-        [data-theme="dark"] .form-control:focus,
-        [data-theme="dark"] .form-select:focus {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border-color: var(--primary-color);
-        }
-        
-        [data-theme="dark"] .alert {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-        
-        [data-theme="dark"] h1,
-        [data-theme="dark"] h2,
-        [data-theme="dark"] h3,
-        [data-theme="dark"] h4,
-        [data-theme="dark"] h5,
-        [data-theme="dark"] h6 {
-            color: var(--text-primary) !important;
-        }
-        
-        [data-theme="dark"] p,
-        [data-theme="dark"] span,
-        [data-theme="dark"] label,
-        [data-theme="dark"] .text-muted {
-            color: var(--text-secondary) !important;
-        }
-        
-        /* Dark Mode Toggle Button */
-        .theme-toggle-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-        }
-        
-        .theme-toggle-btn:hover {
-            background: var(--hover-bg);
-        }
-        
-        .theme-toggle-btn i {
-            font-size: 1rem;
         }
         
         /* Responsive */
@@ -771,8 +485,8 @@
             }
         }
         
-        @media (max-width: 768px) {
-            /* Hide desktop sidebar */
+        @media (max-width: 991px) {
+            /* Hide desktop sidebar on tablet and below */
             .sidebar-wrapper {
                 position: fixed;
                 left: -100%;
@@ -794,14 +508,30 @@
                 justify-content: center;
             }
             
-            /* Show bottom navigation */
-            .bottom-nav {
-                display: flex;
+            /* Adjust main wrapper to full width */
+            .main-wrapper {
+                margin-left: 0 !important;
+                width: 100% !important;
             }
             
             /* Adjust main content */
             .main-content {
                 padding: 1rem;
+            }
+            
+            .top-bar {
+                margin-top: 60px; /* Space for menu toggle */
+            }
+        }
+        
+        @media (max-width: 768px) {
+            /* Show bottom navigation */
+            .bottom-nav {
+                display: flex;
+            }
+            
+            /* Adjust main content for bottom nav */
+            .main-content {
                 padding-bottom: 80px; /* Space for bottom nav */
             }
             
@@ -809,7 +539,6 @@
                 flex-direction: column;
                 gap: 1rem;
                 align-items: flex-start !important;
-                margin-top: 60px; /* Space for menu toggle */
             }
             
             .top-bar h1 {
@@ -842,6 +571,336 @@
             .stat-card .stat-value {
                 font-size: 1.25rem;
             }
+        }
+        
+        /* Additional Dark Mode Styles */
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        .card-header {
+            background: var(--bg-tertiary) !important;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        .form-control, .form-select {
+            background: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background: var(--bg-secondary);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .breadcrumb {
+            background: transparent;
+        }
+        
+        .breadcrumb-item,
+        .breadcrumb-item a {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb-item.active {
+            color: var(--text-primary);
+        }
+        
+        .page-header h1 {
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .bg-light {
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        [data-theme="dark"] .bg-white {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        [data-theme="dark"] .text-dark {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .border {
+            border-color: var(--border-color) !important;
+        }
+        
+        /* Fix text colors in dark mode */
+        [data-theme="dark"] .text-black,
+        [data-theme="dark"] h1, 
+        [data-theme="dark"] h2, 
+        [data-theme="dark"] h3, 
+        [data-theme="dark"] h4, 
+        [data-theme="dark"] h5, 
+        [data-theme="dark"] h6,
+        [data-theme="dark"] p,
+        [data-theme="dark"] span,
+        [data-theme="dark"] label,
+        [data-theme="dark"] .fw-bold,
+        [data-theme="dark"] strong {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        [data-theme="dark"] small,
+        [data-theme="dark"] .small {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Ensure buttons have proper contrast */
+        [data-theme="dark"] .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .btn-outline-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        [data-theme="dark"] .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Alert styling in dark mode */
+        [data-theme="dark"] .alert {
+            border-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .alert-success {
+            background-color: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+        
+        [data-theme="dark"] .alert-warning {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        
+        [data-theme="dark"] .alert-danger {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        [data-theme="dark"] .alert-info {
+            background-color: rgba(6, 182, 212, 0.15);
+            color: #22d3ee;
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+        
+        /* Table styling in dark mode */
+        [data-theme="dark"] .table {
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .table thead th {
+            color: var(--text-primary) !important;
+            border-color: var(--border-color);
+            background-color: var(--bg-tertiary);
+        }
+        
+        [data-theme="dark"] .table tbody td {
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .table-hover tbody tr:hover {
+            background-color: var(--bg-tertiary);
+        }
+        
+        /* Text muted in dark mode */
+        [data-theme="dark"] .text-muted {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Card headers in dark mode */
+        [data-theme="dark"] .card-header.bg-white,
+        [data-theme="dark"] .card-footer.bg-white {
+            background-color: var(--bg-secondary) !important;
+            border-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] .card-header h5,
+        [data-theme="dark"] .card-header h6 {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Fix Bootstrap color utilities in dark mode */
+        [data-theme="dark"] .text-success {
+            color: #4ade80 !important;
+        }
+        
+        [data-theme="dark"] .text-warning {
+            color: #fbbf24 !important;
+        }
+        
+        [data-theme="dark"] .text-danger {
+            color: #f87171 !important;
+        }
+        
+        [data-theme="dark"] .text-info {
+            color: #22d3ee !important;
+        }
+        
+        [data-theme="dark"] .text-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        /* Badges in dark mode */
+        [data-theme="dark"] .badge {
+            color: white !important;
+        }
+        
+        /* Small text elements */
+        [data-theme="dark"] small,
+        [data-theme="dark"] .small,
+        [data-theme="dark"] td small {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Button outline info in dark mode */
+        [data-theme="dark"] .btn-outline-info {
+            color: #22d3ee;
+            border-color: #22d3ee;
+        }
+        
+        [data-theme="dark"] .btn-outline-info:hover {
+            background-color: #22d3ee;
+            color: white;
+        }
+        
+        /* Breadcrumb in dark mode */
+        [data-theme="dark"] .breadcrumb-item {
+            color: var(--text-secondary);
+        }
+        
+        [data-theme="dark"] .breadcrumb-item.active {
+            color: var(--text-primary);
+        }
+        
+        /* Form elements in dark mode */
+        [data-theme="dark"] .form-select,
+        [data-theme="dark"] .form-control {
+            background-color: var(--bg-tertiary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .form-select:focus,
+        [data-theme="dark"] .form-control:focus {
+            background-color: var(--bg-tertiary);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .form-label {
+            color: var(--text-primary);
+        }
+        
+        /* Stat cards always have white text */
+        [data-theme="dark"] .stat-card,
+        [data-theme="dark"] .stat-card p,
+        [data-theme="dark"] .stat-card h3,
+        [data-theme="dark"] .stat-card .stat-value {
+            color: white !important;
+        }
+        
+        [data-theme="dark"] .stat-card .text-white-50 {
+            color: rgba(255, 255, 255, 0.5) !important;
+        }
+        
+        /* Table light header in dark mode */
+        [data-theme="dark"] .table-light {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .table-light th {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Page header in dark mode */
+        [data-theme="dark"] .page-header h1,
+        [data-theme="dark"] .page-header h2,
+        [data-theme="dark"] .page-header h3 {
+            color: var(--text-primary) !important;
+        }
+        
+        /* Card body text color */
+        [data-theme="dark"] .card-body {
+            color: var(--text-primary);
+        }
+        
+        /* Avatar in dark mode */
+        [data-theme="dark"] .avatar {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        /* Ensure all text in cards is visible - but don't override layout */
+        [data-theme="dark"] .card p:not(.mb-0):not(.mb-1):not(.mb-2):not(.mb-3),
+        [data-theme="dark"] .card-body p:not(.mb-0):not(.mb-1):not(.mb-2):not(.mb-3) {
+            color: var(--text-primary);
+        }
+        
+        /* Links in dark mode */
+        [data-theme="dark"] a {
+            color: var(--primary-color);
+        }
+        
+        [data-theme="dark"] a:hover {
+            color: #5b8def;
+        }
+        
+        /* Form control option elements */
+        [data-theme="dark"] .form-select option {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        /* List group items in dark mode */
+        [data-theme="dark"] .list-group-item {
+            background-color: transparent;
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .list-group-item .fw-bold {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .list-group-flush .list-group-item {
+            background-color: transparent;
+        }
+        
+        /* Avatar styling */
+        [data-theme="dark"] .avatar {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
         }
     </style>
 </head>
@@ -928,11 +987,10 @@
                 <div class="top-bar d-flex justify-content-between align-items-center">
                     <h1>@yield('title', 'Admin Dashboard')</h1>
                     
-                    <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2">
                         <!-- Dark Mode Toggle -->
-                        <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode">
-                            <i class="fas fa-moon" id="themeIcon"></i>
-                            <span id="themeText">Dark</span>
+                        <button class="btn btn-outline-secondary" id="darkModeToggle" title="Toggle Dark Mode">
+                            <i class="fas fa-moon" id="darkModeIcon"></i>
                         </button>
                         
                         <div class="dropdown">
@@ -944,7 +1002,7 @@
                                         {{ substr(Auth::user()->name, 0, 1) }}
                                     </div>
                                 @endif
-                                <span>{{ Auth::user()->name ?? 'Admin' }}</span>
+                                <span class="d-none d-md-inline">{{ Auth::user()->name ?? 'Admin' }}</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
@@ -960,6 +1018,13 @@
                                 </li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 
@@ -1019,8 +1084,35 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Mobile Menu Script -->
+    <!-- Dark Mode & Mobile Menu Script -->
     <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        updateDarkModeIcon(currentTheme);
+        
+        darkModeToggle.addEventListener('click', () => {
+            const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            updateDarkModeIcon(theme);
+        });
+        
+        function updateDarkModeIcon(theme) {
+            if (theme === 'dark') {
+                darkModeIcon.classList.remove('fa-moon');
+                darkModeIcon.classList.add('fa-sun');
+            } else {
+                darkModeIcon.classList.remove('fa-sun');
+                darkModeIcon.classList.add('fa-moon');
+            }
+        }
+        
         // Mobile sidebar toggle
         const menuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.getElementById('sidebar');
@@ -1046,47 +1138,6 @@
                 });
             });
         }
-        
-        // Dark Mode Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
-        const htmlElement = document.documentElement;
-        
-        // Check for saved theme preference or default to 'light'
-        const currentTheme = localStorage.getItem('admin-theme') || 'light';
-        
-        // Apply saved theme on page load
-        if (currentTheme === 'dark') {
-            htmlElement.setAttribute('data-theme', 'dark');
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-            themeText.textContent = 'Light';
-        } else {
-            htmlElement.setAttribute('data-theme', 'light');
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-            themeText.textContent = 'Dark';
-        }
-        
-        // Toggle theme on button click
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            
-            if (currentTheme === 'light') {
-                htmlElement.setAttribute('data-theme', 'dark');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-                themeText.textContent = 'Light';
-                localStorage.setItem('admin-theme', 'dark');
-            } else {
-                htmlElement.setAttribute('data-theme', 'light');
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-                themeText.textContent = 'Dark';
-                localStorage.setItem('admin-theme', 'light');
-            }
-        });
     </script>
     
     <!-- Stack for page scripts -->
