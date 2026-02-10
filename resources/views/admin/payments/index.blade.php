@@ -145,9 +145,16 @@
                         <td class="align-middle">{{ $payments->firstItem() + $index }}</td>
                         <td class="align-middle">
                             <div class="d-flex align-items-center">
-                                <div class="avatar me-2 d-none d-sm-flex" style="width: 35px; height: 35px; font-size: 0.9rem;">
-                                    {{ substr($payment->userExtended?->user?->name ?? 'N/A', 0, 1) }}
-                                </div>
+                                @if($payment->userExtended?->profile_photo_url)
+                                    <img src="{{ $payment->userExtended->profile_photo_url }}" 
+                                         alt="{{ $payment->userExtended?->user?->name ?? 'User' }}" 
+                                         class="rounded-circle me-2 d-none d-sm-flex"
+                                         style="width: 35px; height: 35px; object-fit: cover;">
+                                @else
+                                    <div class="avatar me-2 d-none d-sm-flex" style="width: 35px; height: 35px; font-size: 0.9rem;">
+                                        {{ substr($payment->userExtended?->user?->name ?? 'N/A', 0, 1) }}
+                                    </div>
+                                @endif
                                 <div>
                                     <strong class="d-block">{{ $payment->userExtended?->user?->name ?? 'User Tidak Ditemukan' }}</strong>
                                     <small class="text-muted d-block">

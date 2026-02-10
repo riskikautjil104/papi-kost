@@ -22,9 +22,16 @@
                 <h5 class="mb-0">Informasi Penghuni</h5>
             </div>
             <div class="card-body text-center">
-                <div class="avatar mx-auto mb-3" style="background: linear-gradient(135deg, #4f46e5, #818cf8); width: 80px; height: 80px; font-size: 32px;">
-                    {{ substr($user->user->name, 0, 1) }}
-                </div>
+                @if($user->profile_photo_url)
+                    <img src="{{ $user->profile_photo_url }}" 
+                         alt="{{ $user->user->name }}" 
+                         class="rounded-circle mx-auto mb-3 d-block"
+                         style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #4f46e5;">
+                @else
+                    <div class="avatar mx-auto mb-3" style="background: linear-gradient(135deg, #4f46e5, #818cf8); width: 100px; height: 100px; font-size: 2.5rem;">
+                        {{ substr($user->user->name, 0, 1) }}
+                    </div>
+                @endif
                 <h5 class="mb-1">{{ $user->user->name }}</h5>
                 <p class="text-muted mb-2">{{ $user->user->email }}</p>
 

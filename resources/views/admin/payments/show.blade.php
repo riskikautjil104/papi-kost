@@ -100,6 +100,72 @@
             </div>
         </div>
 
+        <!-- All Payments for This Period -->
+        @php
+            $allPayments = $payment->userExtended?->getPaymentsForMonth($payment->month, $payment->year) ?? collect();
+            $totalPaid = $allPayments->where('status', 'approved')->sum('amount');
+            $remaining = max(0, ($payment->userExtended?->monthly_fee ?? 0) - $totalPaid);
+        @endphp
+        
+        @if($allPayments->count() > 0)
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Semua Pembayaran {{ $payment->month_name }} {{ $payment->year }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3 text-center">
+                    <div class="col-4">
+                        <div class="small text-muted">Iuran</div>
+                        <div class="fw-bold">Rp {{ number_format($payment->userExtended?->monthly_fee ?? 0, 0, ',', '.') }}</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="small text-muted">Sudah Bayar</div>
+                        <div class="fw-bold text-success">Rp {{ number_format($totalPaid, 0, ',', '.') }}</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="small text-muted">Sisa</div>
+                        <div class="fw-bold {{ $remaining > 0 ? 'text-danger' : 'text-success' }}">
+                            Rp {{ number_format($remaining, 0, ',', '.') }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Jumlah</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($allPayments as $p)
+                            <tr class="{{ $p->id === $payment->id ? 'table-primary' : '' }}">
+                                <td>{{ $p->created_at->format('d M Y') }}</td>
+                                <td>Rp {{ number_format($p->amount, 0, ',', '.') }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $p->status_badge }}">{{ ucfirst($p->status) }}</span>
+                                </td>
+                                <td>
+                                    @if($p->id !== $payment->id)
+                                    <a href="{{ route('admin.payments.show', $p) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    @else
+                                    <span class="badge bg-info">Sedang Dilihat</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Proof Image -->
         @if($payment->proof_image)
         <div class="card">
@@ -162,9 +228,16 @@
             </div>
             <div class="card-body">
                 <div class="text-center mb-3">
-                    <div class="avatar avatar-lg mx-auto mb-2">
-                        {{ substr($payment->userExtended?->user?->name ?? 'N/A', 0, 1) }}
-                    </div>
+                    @if($payment->userExtended?->profile_photo_url)
+                        <img src="{{ $payment->userExtended->profile_photo_url }}" 
+                             alt="{{ $payment->userExtended?->user?->name ?? 'User' }}" 
+                             class="rounded-circle mx-auto mb-2 d-block"
+                             style="width: 80px; height: 80px; object-fit: cover;">
+                    @else
+                        <div class="avatar avatar-lg mx-auto mb-2">
+                            {{ substr($payment->userExtended?->user?->name ?? 'N/A', 0, 1) }}
+                        </div>
+                    @endif
                     <h6 class="mb-0">{{ $payment->userExtended?->user?->name ?? 'User Tidak Ditemukan' }}</h6>
                     <small class="text-muted">{{ $payment->userExtended?->user?->email ?? '-' }}</small>
                 </div>

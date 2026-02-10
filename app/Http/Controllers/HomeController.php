@@ -65,7 +65,8 @@ class HomeController extends Controller
                         return [
                             'name' => $user->user->name,
                             'phone' => $user->phone,
-                            'join_date' => $user->join_date->format('d/m/Y')
+                            'join_date' => $user->join_date->format('d/m/Y'),
+                            'profile_photo_url' => $user->profile_photo_url
                         ];
                     })
                 ];

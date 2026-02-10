@@ -457,7 +457,7 @@
         }
     </style>
 </head>
-<body>
+<body class="user-dashboard">
     <!-- Mobile Menu Toggle Button -->
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
         <i class="fas fa-bars"></i>
@@ -516,9 +516,18 @@
                     <h1>@yield('title', 'User Dashboard')</h1>
                     
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-2"></i>
-                            {{ Auth::user()->name ?? 'User' }}
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(Auth::user()->usersExtended?->profile_photo_url)
+                                <img src="{{ Auth::user()->usersExtended->profile_photo_url }}" 
+                                     alt="{{ Auth::user()->name }}" 
+                                     class="rounded-circle"
+                                     style="width: 28px; height: 28px; object-fit: cover;">
+                            @else
+                                <div class="avatar d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                            @endif
+                            <span>{{ Auth::user()->name ?? 'User' }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="{{ route('user.profile') }}"><i class="fas fa-user me-2"></i>Profil</a></li>

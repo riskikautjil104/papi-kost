@@ -238,9 +238,16 @@
                         <h6 class="mb-0"><i class="fas fa-user-circle me-2"></i>Profil Saya</h6>
                     </div>
                     <div class="card-body text-center">
-                        <div class="avatar mx-auto mb-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
-                            {{ substr($user->name, 0, 1) }}
-                        </div>
+                        @if($user->usersExtended?->profile_photo_url)
+                            <img src="{{ $user->usersExtended->profile_photo_url }}" 
+                                 alt="{{ $user->name }}" 
+                                 class="rounded-circle mx-auto mb-3 d-block"
+                                 style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #0066FF;">
+                        @else
+                            <div class="avatar mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                                {{ substr($user->name, 0, 1) }}
+                            </div>
+                        @endif
                         <h5 class="mb-1">{{ $user->name }}</h5>
                         <p class="text-muted mb-3">{{ $user->email }}</p>
                         

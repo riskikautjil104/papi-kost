@@ -13,9 +13,22 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        <!-- Profile Photo -->
+        <div>
+            <x-input-label for="profile_photo" :value="__('Profile Photo')" />
+            @if($user->usersExtended && $user->usersExtended->profile_photo_url)
+                <div class="mt-2 mb-2">
+                    <img src="{{ $user->usersExtended->profile_photo_url }}" alt="Profile" class="h-20 w-20 rounded-full object-cover">
+                </div>
+            @endif
+            <input id="profile_photo" name="profile_photo" type="file" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm" accept="image/*">
+            <x-input-error class="mt-2" :messages="$errors->get('profile_photo')" />
+            <p class="text-sm text-gray-500 mt-1">Max 2MB (JPG, PNG)</p>
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -45,6 +58,39 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <!-- Phone -->
+        <div>
+            <x-input-label for="phone" :value="__('Phone Number')" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->usersExtended->phone ?? '')" autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+        </div>
+
+        <!-- Address -->
+        <div>
+            <x-input-label for="address" :value="__('Address')" />
+            <textarea id="address" name="address" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" rows="3">{{ old('address', $user->usersExtended->address ?? '') }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('address')" />
+        </div>
+
+        <!-- Emergency Contact -->
+        <div class="border-t pt-4 mt-4">
+            <h3 class="text-md font-medium text-gray-900 mb-3">Emergency Contact</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <x-input-label for="emergency_contact_name" :value="__('Contact Name')" />
+                    <x-text-input id="emergency_contact_name" name="emergency_contact_name" type="text" class="mt-1 block w-full" :value="old('emergency_contact_name', $user->usersExtended->emergency_contact_name ?? '')" />
+                    <x-input-error class="mt-2" :messages="$errors->get('emergency_contact_name')" />
+                </div>
+
+                <div>
+                    <x-input-label for="emergency_contact" :value="__('Contact Phone')" />
+                    <x-text-input id="emergency_contact" name="emergency_contact" type="text" class="mt-1 block w-full" :value="old('emergency_contact', $user->usersExtended->emergency_contact ?? '')" />
+                    <x-input-error class="mt-2" :messages="$errors->get('emergency_contact')" />
+                </div>
+            </div>
         </div>
 
         <div class="flex items-center gap-4">

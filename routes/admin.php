@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
         Route::get('/report', [FinanceController::class, 'report'])->name('report');
         Route::get('/report/pdf', [FinanceController::class, 'exportPdf'])->name('report.pdf');
         Route::get('/report/excel', [FinanceController::class, 'exportExcel'])->name('report.excel');
+    });
+
+    // Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        // Annual Report
+        Route::get('/annual', [ReportController::class, 'annual'])->name('annual');
+        Route::get('/annual/pdf', [ReportController::class, 'exportAnnualPdf'])->name('annual.pdf');
+        Route::get('/annual/excel', [ReportController::class, 'exportAnnualExcel'])->name('annual.excel');
+        
+        // User Report
+        Route::get('/user', [ReportController::class, 'userHistory'])->name('user');
+        Route::get('/user/{user}', [ReportController::class, 'userHistory'])->name('user.history');
+        Route::get('/user/{user}/pdf', [ReportController::class, 'exportUserPdf'])->name('user.pdf');
+        Route::get('/user/{user}/excel', [ReportController::class, 'exportUserExcel'])->name('user.excel');
     });
 
     // Settings

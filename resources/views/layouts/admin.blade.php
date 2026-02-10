@@ -497,7 +497,7 @@
         }
     </style>
 </head>
-<body>
+<body class="admin-dashboard">
     <!-- Mobile Menu Toggle Button -->
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
         <i class="fas fa-bars"></i>
@@ -548,7 +548,7 @@
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.finance.report') ? 'active' : '' }}" href="{{ route('admin.finance.report') }}">
+                    <a class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}" href="{{ route('admin.reports.annual') }}">
                         <i class="fas fa-chart-bar"></i>
                         <span>Laporan</span>
                     </a>
@@ -581,9 +581,15 @@
                     <h1>@yield('title', 'Admin Dashboard')</h1>
                     
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-2"></i>
-                            {{ Auth::user()->name ?? 'Admin' }}
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(Auth::user()->usersExtended?->profile_photo_url)
+                                <img src="{{ Auth::user()->usersExtended->profile_photo_url }}" alt="{{ Auth::user()->name }}" class="rounded-circle" style="width: 28px; height: 28px; object-fit: cover;">
+                            @else
+                                <div class="avatar d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.75rem;">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                            @endif
+                            <span>{{ Auth::user()->name ?? 'Admin' }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
@@ -638,7 +644,7 @@
             <span>Lainnya</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileMoreMenu">
-            <li><a class="dropdown-item" href="{{ route('admin.finance.report') }}"><i class="fas fa-chart-bar me-2"></i>Laporan</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.reports.annual') }}"><i class="fas fa-chart-bar me-2"></i>Laporan</a></li>
             <li><a class="dropdown-item" href="{{ route('home') }}" target="_blank"><i class="fas fa-external-link-alt me-2"></i>Lihat Website</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>

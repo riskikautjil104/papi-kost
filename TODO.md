@@ -43,11 +43,11 @@
 - [x] Total uang kas kontrakan
 
 ## 📤 Export Reports
-- [ ] Export Excel (sudah ada)
-- [ ] Export PDF
-  - [ ] Laporan keuangan bulanan
-  - [ ] Laporan tunggakan
-  - [ ] Laporan user
+- [x] Export Excel (sudah ada)
+- [x] Export PDF
+  - [x] Laporan tahunan (PDF & Excel)
+  - [x] Laporan per user (PDF & Excel)
+  - [x] Riwayat pembayaran lengkap
 
 ## 🎨 UI/UX Improvements
 - [x] Dashboard home dengan ringkasan
@@ -75,9 +75,11 @@
 7. Payment system (approve/reject)
 8. Finance management (income/expense)
 9. User dashboard dengan filter & statistik
+10. **Email Notification System** - Otomatis tiap pagi jam 7 WIT
+11. **Laporan Lengkap** - Tahunan & per user dengan export PDF/Excel
 
 ### In Progress 🔄
 1. -
 
 ### Pending ⏳
-1. Export PDF reports
+1. -

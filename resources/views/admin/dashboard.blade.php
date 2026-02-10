@@ -99,9 +99,16 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="avatar me-2">
-                                            {{ substr($user->user->name, 0, 1) }}
-                                        </div>
+                                        @if($user->profile_photo_url)
+                                            <img src="{{ $user->profile_photo_url }}" 
+                                                 alt="{{ $user->user->name }}" 
+                                                 class="rounded-circle me-2"
+                                                 style="width: 40px; height: 40px; object-fit: cover;">
+                                        @else
+                                            <div class="avatar me-2">
+                                                {{ substr($user->user->name, 0, 1) }}
+                                            </div>
+                                        @endif
                                         <div>
                                             <strong>{{ $user->user->name }}</strong>
                                             <small class="d-block text-muted">{{ $user->user->email }}</small>
@@ -149,9 +156,21 @@
                 <div class="list-group list-group-flush">
                     @forelse($recentPayments as $payment)
                     <div class="list-group-item d-flex justify-content-between align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div class="fw-bold">{{ $payment->userExtended?->user?->name ?? 'User Tidak Ditemukan' }}</div>
-                            <small class="text-muted">{{ $payment->month_name }} {{ $payment->year }}</small>
+                        <div class="d-flex align-items-center">
+                            @if($payment->userExtended?->profile_photo_url)
+                                <img src="{{ $payment->userExtended->profile_photo_url }}" 
+                                     alt="{{ $payment->userExtended?->user?->name ?? 'User' }}" 
+                                     class="rounded-circle me-2"
+                                     style="width: 40px; height: 40px; object-fit: cover;">
+                            @else
+                                <div class="avatar me-2" style="width: 40px; height: 40px;">
+                                    {{ substr($payment->userExtended?->user?->name ?? 'U', 0, 1) }}
+                                </div>
+                            @endif
+                            <div class="me-auto">
+                                <div class="fw-bold">{{ $payment->userExtended?->user?->name ?? 'User Tidak Ditemukan' }}</div>
+                                <small class="text-muted">{{ $payment->month_name }} {{ $payment->year }}</small>
+                            </div>
                         </div>
                         <div class="text-end">
                             <div class="fw-bold">Rp {{ number_format($payment->amount, 0, ',', '.') }}</div>

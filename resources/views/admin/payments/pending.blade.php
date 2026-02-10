@@ -40,9 +40,16 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="avatar me-2">
-                                            {{ substr($payment->userExtended?->user?->name ?? 'N/A', 0, 1) }}
-                                        </div>
+                                        @if($payment->userExtended?->profile_photo_url)
+                                            <img src="{{ $payment->userExtended->profile_photo_url }}" 
+                                                 alt="{{ $payment->userExtended?->user?->name ?? 'User' }}" 
+                                                 class="rounded-circle me-2"
+                                                 style="width: 40px; height: 40px; object-fit: cover;">
+                                        @else
+                                            <div class="avatar me-2">
+                                                {{ substr($payment->userExtended?->user?->name ?? 'N/A', 0, 1) }}
+                                            </div>
+                                        @endif
                                         <div>
                                             <strong>{{ $payment->userExtended?->user?->name ?? 'User Tidak Ditemukan' }}</strong>
                                             <small class="d-block text-muted">{{ $payment->userExtended?->user?->email ?? '-' }}</small>

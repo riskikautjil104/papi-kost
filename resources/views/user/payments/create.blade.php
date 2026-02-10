@@ -21,6 +21,30 @@
                         </div>
                     </div>
 
+                    <!-- Payment Status Card -->
+                    <div class="card mb-4 border-primary">
+                        <div class="card-body">
+                            <h6 class="card-title text-primary mb-3"><i class="fas fa-info-circle me-2"></i>Status Pembayaran</h6>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="small text-muted">Iuran Bulanan</div>
+                                    <div class="fw-bold">Rp {{ number_format($user->monthly_fee, 0, ',', '.') }}</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="small text-muted">Sudah Dibayar</div>
+                                    <div class="fw-bold text-success" id="paid-amount">Rp 0</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="small text-muted">Sisa Bayar</div>
+                                    <div class="fw-bold text-danger" id="remaining-amount">Rp {{ number_format($user->monthly_fee, 0, ',', '.') }}</div>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-center">
+                                <span id="payment-status-badge" class="badge bg-warning">Belum Lunas</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <form method="POST" action="{{ route('user.payments.store', $user->id) }}" enctype="multipart/form-data">
                         @csrf
 
@@ -54,7 +78,10 @@
                             <label for="amount" class="form-label">Jumlah Pembayaran (Rp) <span class="text-danger">*</span></label>
                             <input type="number" id="amount" name="amount" class="form-control @error('amount') is-invalid @enderror" 
                                    value="{{ old('amount', $user->monthly_fee) }}" required min="0" step="0.01">
-                            <div class="form-text">Iuran bulanan Anda: Rp {{ number_format($user->monthly_fee, 0, ',', '.') }}</div>
+                            <div class="form-text">
+                                Iuran bulanan: Rp {{ number_format($user->monthly_fee, 0, ',', '.') }} | 
+                                Sisa yang harus dibayar: <span class="text-danger fw-bold" id="sisa-display">Rp {{ number_format($user->monthly_fee, 0, ',', '.') }}</span>
+                            </div>
                             @error('amount')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -167,6 +194,66 @@
             bankInfo.style.display = 'none';
         }
     });
+
+    // Payment status tracking for multi-payment
+    const monthlyFee = {{ $user->monthly_fee }};
+    const existingPayments = @json($existingPayments ?? []);
+    
+    function updatePaymentStatus() {
+        const month = parseInt(document.getElementById('month').value);
+        const year = parseInt(document.getElementById('year').value);
+        
+        // Calculate total paid for selected month/year
+        let totalPaid = 0;
+        existingPayments.forEach(payment => {
+            if (payment.month == month && payment.year == year && payment.status === 'approved') {
+                totalPaid += parseFloat(payment.amount);
+            }
+        });
+        
+        const remaining = Math.max(0, monthlyFee - totalPaid);
+        const isFullyPaid = remaining <= 0;
+        
+        // Update display
+        document.getElementById('paid-amount').textContent = 'Rp ' + totalPaid.toLocaleString('id-ID');
+        document.getElementById('remaining-amount').textContent = 'Rp ' + remaining.toLocaleString('id-ID');
+        document.getElementById('sisa-display').textContent = 'Rp ' + remaining.toLocaleString('id-ID');
+        
+        // Update badge
+        const badge = document.getElementById('payment-status-badge');
+        if (isFullyPaid) {
+            badge.className = 'badge bg-success';
+            badge.textContent = 'Lunas';
+        } else if (totalPaid > 0) {
+            badge.className = 'badge bg-warning';
+            badge.textContent = 'Sebagian (' + ((totalPaid/monthlyFee)*100).toFixed(0) + '%)';
+        } else {
+            badge.className = 'badge bg-danger';
+            badge.textContent = 'Belum Bayar';
+        }
+        
+        // Update amount input placeholder and max
+        const amountInput = document.getElementById('amount');
+        amountInput.placeholder = 'Sisa: Rp ' + remaining.toLocaleString('id-ID');
+        amountInput.max = remaining;
+        
+        // Auto-fill with remaining amount if not manually changed
+        if (!amountInput.dataset.manual) {
+            amountInput.value = remaining;
+        }
+    }
+    
+    // Track manual changes to amount
+    document.getElementById('amount').addEventListener('input', function() {
+        this.dataset.manual = 'true';
+    });
+    
+    // Update on month/year change
+    document.getElementById('month').addEventListener('change', updatePaymentStatus);
+    document.getElementById('year').addEventListener('change', updatePaymentStatus);
+    
+    // Initial update
+    updatePaymentStatus();
 </script>
 @endpush
 @endsection

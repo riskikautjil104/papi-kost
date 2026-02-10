@@ -75,13 +75,21 @@
                         <td>{{ $users->firstItem() + $index }}</td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <div class="avatar me-2" style="background: linear-gradient(135deg, #4f46e5, #818cf8);">
-                                    {{ substr($user->user->name, 0, 1) }}
-                                </div>
+                                @if($user->profile_photo_url)
+                                    <img src="{{ $user->profile_photo_url }}" 
+                                         alt="{{ $user->user->name }}" 
+                                         class="rounded-circle me-2"
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                @else
+                                    <div class="avatar me-2" style="background: linear-gradient(135deg, #4f46e5, #818cf8);">
+                                        {{ substr($user->user->name, 0, 1) }}
+                                    </div>
+                                @endif
                                 <div>
                                     <strong>{{ $user->user->name }}</strong>
                                     <small class="d-block text-muted">{{ $user->user->email }}</small>
                                 </div>
+                            </div>
                         </td>
                         <td>
                             <i class="fas fa-phone text-muted me-1"></i> {{ $user->phone }}<br>

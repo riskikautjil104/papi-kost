@@ -962,6 +962,155 @@ footer {
 }
 
 /* ============================================
+   ADMIN & USER DASHBOARD ENHANCEMENTS
+   ============================================ */
+
+.admin-dashboard,
+.user-dashboard {
+    background-color: #f5f7fb;
+    color: #0f172a;
+}
+
+.admin-dashboard .main-content,
+.user-dashboard .main-content {
+    padding: clamp(1rem, 2vw, 2rem);
+}
+
+.admin-dashboard .card,
+.user-dashboard .card {
+    border-radius: 16px;
+    border: 1px solid #e8edf5;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+}
+
+.admin-dashboard .card-header,
+.user-dashboard .card-header {
+    background: #fff;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.admin-dashboard .btn-admin,
+.user-dashboard .btn-admin {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+}
+
+.admin-dashboard .btn-admin:hover,
+.user-dashboard .btn-admin:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 26px rgba(79, 70, 229, 0.28);
+}
+
+.admin-dashboard .top-bar,
+.user-dashboard .top-bar {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.admin-dashboard .page-header,
+.user-dashboard .page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+}
+
+.admin-dashboard .page-header h1,
+.user-dashboard .page-header h1 {
+    margin-bottom: 0;
+}
+
+.admin-dashboard .page-header nav,
+.user-dashboard .page-header nav {
+    width: 100%;
+}
+
+.admin-dashboard .table-responsive,
+.user-dashboard .table-responsive {
+    border-radius: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-dashboard .table th,
+.user-dashboard .table th {
+    font-weight: 600;
+    color: #475569;
+    background: #f8fafc;
+}
+
+.admin-dashboard .badge,
+.user-dashboard .badge {
+    font-weight: 600;
+}
+
+.admin-dashboard .stat-card,
+.user-dashboard .stat-card {
+    border: none;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+}
+
+.admin-dashboard .stat-card.success,
+.user-dashboard .stat-card.success {
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+}
+
+.admin-dashboard .stat-card.warning,
+.user-dashboard .stat-card.warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+.admin-dashboard .stat-card.info,
+.user-dashboard .stat-card.info {
+    background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+}
+
+.admin-dashboard .sidebar-wrapper,
+.user-dashboard .sidebar-wrapper {
+    background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+}
+
+@media (max-width: 992px) {
+    .admin-dashboard .main-content,
+    .user-dashboard .main-content {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-dashboard .page-header,
+    .user-dashboard .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .admin-dashboard .main-content,
+    .user-dashboard .main-content {
+        padding-bottom: 5rem;
+    }
+    
+    .admin-dashboard .card,
+    .user-dashboard .card {
+        border-radius: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-dashboard .table td,
+    .user-dashboard .table td {
+        font-size: 0.875rem;
+    }
+    
+    .admin-dashboard .breadcrumb,
+    .user-dashboard .breadcrumb {
+        flex-wrap: wrap;
+    }
+}
+
+/* ============================================
    RESPONSIVE STYLES
    ============================================ */
 

@@ -145,7 +145,13 @@ class PaymentController extends Controller
         $currentMonth = now()->month;
         $currentYear = now()->year;
 
-        return view('user.payments.create', compact('user', 'months', 'currentMonth', 'currentYear'));
+        // Get existing payments for multi-payment tracking
+        $existingPayments = PaymentProof::where('users_extended_id', $user->id)
+            ->where('status', '!=', 'rejected')
+            ->select('id', 'amount', 'month', 'year', 'status')
+            ->get();
+
+        return view('user.payments.create', compact('user', 'months', 'currentMonth', 'currentYear', 'existingPayments'));
     }
 
     public function store(Request $request, $userExtendedId)
@@ -167,15 +173,12 @@ class PaymentController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        // Check for duplicate payment per month/year
-        $existingPayment = PaymentProof::where('users_extended_id', $user->id)
-            ->where('month', $request->month)
-            ->where('year', $request->year)
-            ->where('status', '!=', 'rejected')
-            ->first();
-
-        if ($existingPayment) {
-            return back()->withErrors(['duplicate' => 'Pembayaran untuk bulan ini sudah ada.']);
+        // Check if total payments would exceed monthly fee
+        $totalPaid = $user->getTotalPaidForMonth($request->month, $request->year);
+        $remaining = $user->monthly_fee - $totalPaid;
+        
+        if ($request->amount > $remaining) {
+            return back()->withErrors(['amount' => "Jumlah pembayaran melebihi sisa yang harus dibayar (Rp " . number_format($remaining, 0, ',', '.') . ")"]);
         }
 
         $data = [

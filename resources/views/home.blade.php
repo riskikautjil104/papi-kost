@@ -730,11 +730,22 @@
                     <h3 style="color: var(--accent-cyan); margin-bottom: 20px; font-size: 1.5rem;">Kamar {{ $room['room_number'] }}</h3>
                     <div style="space-y: 15px;">
                         @forelse($room['occupants'] as $occupant)
-                        <div style="background: rgba(0, 102, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(0, 168, 255, 0.2);">
-                            <div style="font-weight: 600; color: var(--text-white); margin-bottom: 5px;">{{ $occupant['name'] }}</div>
-                            <div style="color: var(--text-gray); font-size: 0.9rem;">
-                                <i class="fas fa-phone" style="margin-right: 5px;"></i>{{ $occupant['phone'] }}<br>
-                                <i class="fas fa-calendar" style="margin-right: 5px;"></i>Bergabung: {{ $occupant['join_date'] }}
+                        <div style="background: rgba(0, 102, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(0, 168, 255, 0.2); display: flex; align-items: center; gap: 15px;">
+                            @if(!empty($occupant['profile_photo_url']))
+                                <img src="{{ $occupant['profile_photo_url'] }}" 
+                                     alt="{{ $occupant['name'] }}" 
+                                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-cyan);">
+                            @else
+                                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-blue), var(--light-blue)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; color: var(--text-white); border: 2px solid var(--accent-cyan);">
+                                    {{ substr($occupant['name'], 0, 1) }}
+                                </div>
+                            @endif
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: var(--text-white); margin-bottom: 5px;">{{ $occupant['name'] }}</div>
+                                <div style="color: var(--text-gray); font-size: 0.9rem;">
+                                    <i class="fas fa-phone" style="margin-right: 5px;"></i>{{ $occupant['phone'] }}<br>
+                                    <i class="fas fa-calendar" style="margin-right: 5px;"></i>Bergabung: {{ $occupant['join_date'] }}
+                                </div>
                             </div>
                         </div>
                         @empty
