@@ -77,6 +77,7 @@
 9. User dashboard dengan filter & statistik
 10. **Email Notification System** - Otomatis tiap pagi jam 7 WIT
 11. **Laporan Lengkap** - Tahunan & per user dengan export PDF/Excel
+12. **Kwitansi Digital** - Auto-generate kwitansi PDF saat payment di-approve
 
 ### In Progress 🔄
 1. -

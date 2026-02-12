@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\PaymentReceiptController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +56,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
         Route::get('/annual', [ReportController::class, 'annual'])->name('annual');
         Route::get('/annual/pdf', [ReportController::class, 'exportAnnualPdf'])->name('annual.pdf');
         Route::get('/annual/excel', [ReportController::class, 'exportAnnualExcel'])->name('annual.excel');
-        
+
         // User Report
         Route::get('/user', [ReportController::class, 'userHistory'])->name('user');
         Route::get('/user/{user}', [ReportController::class, 'userHistory'])->name('user.history');
@@ -67,4 +68,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
     Route::get('/settings', function () {
         return view('admin.settings');
     })->name('settings');
+
+    // Kwitansi Digital
+    Route::prefix('receipts')->name('receipts.')->group(function () {
+        Route::get('/', [PaymentReceiptController::class, 'index'])->name('index');
+        Route::get('/{receipt}', [PaymentReceiptController::class, 'show'])->name('show');
+        Route::get('/{receipt}/download', [PaymentReceiptController::class, 'downloadPdf'])->name('download');
+        Route::get('/{receipt}/preview', [PaymentReceiptController::class, 'previewPdf'])->name('preview');
+        Route::post('/regenerate/{payment}', [PaymentReceiptController::class, 'regenerate'])->name('regenerate');
+    });
 });

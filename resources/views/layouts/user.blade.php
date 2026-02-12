@@ -18,6 +18,8 @@
     <!-- Custom CSS -->
     <link href="{{ asset('css/dtect-style.css') }}" rel="stylesheet">
     
+    @stack('styles')
+    
     <style>
         :root {
             --primary-color: #4f46e5;
@@ -951,6 +953,13 @@
                         <span>Riwayat Pembayaran</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('user.receipts.*') ? 'active' : '' }}" href="{{ route('user.receipts.index') }}">
+                        <i class="fas fa-receipt"></i>
+                        <span>Kwitansi</span>
+                    </a>
+                </li>
                 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('user.profile') ? 'active' : '' }}" href="{{ route('user.profile') }}">
@@ -1042,6 +1051,12 @@
             <span>Lainnya</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileMoreMenu">
+            <li>
+                <a class="dropdown-item" href="{{ route('user.receipts.index') }}">
+                    <i class="fas fa-receipt me-2"></i>Kwitansi
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
             <li>
                 <form action="{{ route('logout') }}" method="POST" class="m-0">
                     @csrf

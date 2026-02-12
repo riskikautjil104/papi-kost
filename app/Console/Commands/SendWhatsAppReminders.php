@@ -48,7 +48,7 @@ class SendWhatsAppReminders extends Command
         $reminderDays = array_map('intval', explode(',', $this->option('days')));
 
         $this->info("📅 Today: " . now()->format('d/m/Y'));
-        $this->info("🔔 Reminder days before due: " . implode(', ', $reminderDays));
+        $this->info("🔔 Reminder days before due: " . implode(', ', $reminderDays) . ", dan setelah jatuh tempo (overdue)");
 
         // Get all active users
         $users = UsersExtended::with('user')
@@ -68,24 +68,26 @@ class SendWhatsAppReminders extends Command
         foreach ($users as $userExtended) {
             $userDueDate = $userExtended->payment_due_date ?? 1;
 
-            // Check if today is H-2 or H-3 before this user's due date
-            $daysUntilDue = $userDueDate - $today;
-
-            // Handle month wrap (e.g., due date is 2nd, today is 29th)
-            if ($daysUntilDue < 0) {
-                $daysInMonth = now()->daysInMonth;
-                $daysUntilDue = ($daysInMonth - $today) + $userDueDate;
-            }
-
-            $isReminderDay = in_array($daysUntilDue, $reminderDays) || $this->option('force');
-
-            if (!$isReminderDay) {
-                continue;
-            }
-
             // Check if user has paid for current month
             if ($userExtended->isFullyPaidForMonth($currentMonth, $currentYear)) {
                 $this->info("✅ {$userExtended->user->name} (Kamar {$userExtended->room_number}) - LUNAS, skip");
+                continue;
+            }
+
+            $daysUntilDue = $userDueDate - $today;
+            $daysInMonth = now()->daysInMonth;
+
+            // Handle month wrap (e.g., due date is 2nd, today is 29th)
+            if ($daysUntilDue < 0) {
+                // Sudah lewat jatuh tempo (overdue)
+                $isOverdue = true;
+            } else {
+                $isOverdue = false;
+            }
+
+            $isReminderDay = in_array($daysUntilDue, $reminderDays) || $isOverdue || $this->option('force');
+
+            if (!$isReminderDay) {
                 continue;
             }
 
@@ -102,7 +104,11 @@ class SendWhatsAppReminders extends Command
             $dueDate = $userDueDate;
             $shouldSend = true;
 
-            $this->info("⏳ {$userExtended->user->name} (Kamar {$userExtended->room_number}) - Sisa: Rp " . number_format($remaining, 0, ',', '.'));
+            if ($isOverdue) {
+                $this->info("⏰ {$userExtended->user->name} (Kamar {$userExtended->room_number}) - LEWAT JATUH TEMPO, sisa: Rp " . number_format($remaining, 0, ',', '.'));
+            } else {
+                $this->info("⏳ {$userExtended->user->name} (Kamar {$userExtended->room_number}) - Sisa: Rp " . number_format($remaining, 0, ',', '.'));
+            }
         }
 
         if (!$shouldSend || empty($unpaidUsers)) {

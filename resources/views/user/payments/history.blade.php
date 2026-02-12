@@ -60,6 +60,11 @@
                                             <i class="fas fa-image"></i>
                                         </a>
                                         @endif
+                                        @if($payment->isApproved() && $payment->receipt)
+                                        <a href="{{ route('user.receipts.download', $payment->receipt) }}" class="btn btn-sm btn-outline-success" title="Download Kwitansi">
+                                            <i class="fas fa-receipt"></i>
+                                        </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

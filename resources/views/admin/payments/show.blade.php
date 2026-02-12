@@ -96,6 +96,16 @@
                     <strong>Disetujui oleh:</strong> {{ $payment->approver->name ?? 'Admin' }}<br>
                     <small>{{ $payment->approved_at?->format('d M Y H:i') }}</small>
                 </div>
+                @if($payment->receipt)
+                <div class="d-flex gap-2 mt-2">
+                    <a href="{{ route('admin.receipts.show', $payment->receipt) }}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-receipt me-1"></i> Lihat Kwitansi
+                    </a>
+                    <a href="{{ route('admin.receipts.download', $payment->receipt) }}" class="btn btn-sm btn-outline-success">
+                        <i class="fas fa-download me-1"></i> Download Kwitansi
+                    </a>
+                </div>
+                @endif
                 @endif
             </div>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PaymentProof;
+use App\Models\PaymentReceipt;
 use App\Models\UsersExtended;
 use App\Models\Transaction;
 use App\Models\Wallet;
@@ -89,6 +90,9 @@ class PaymentController extends Controller
 
             // Update wallet balance
             Wallet::updateBalance($payment->amount, 'income');
+
+            // Auto-generate kwitansi digital
+            PaymentReceipt::generateFromPayment($payment);
         });
 
         // Kirim notifikasi approve ke grup WhatsApp
@@ -149,7 +153,7 @@ class PaymentController extends Controller
     {
         $payment->load(['userExtended' => function ($query) {
             $query->with('user');
-        }, 'approver']);
+        }, 'approver', 'receipt']);
 
         return view('admin.payments.show', compact('payment'));
     }
@@ -285,6 +289,7 @@ class PaymentController extends Controller
         }
 
         $payments = PaymentProof::where('users_extended_id', $user->id)
+            ->with('receipt')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 

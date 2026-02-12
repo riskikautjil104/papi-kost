@@ -18,6 +18,8 @@
     <!-- Custom CSS -->
     <link href="{{ asset('css/dtect-style.css') }}" rel="stylesheet">
     
+    @stack('styles')
+    
     <style>
         :root {
             --primary-color: #4f46e5;
@@ -564,6 +566,45 @@
             color: var(--text-primary);
         }
         
+        [data-theme="dark"] .bg-white {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        [data-theme="dark"] .bg-light {
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        [data-theme="dark"] .border {
+            border-color: var(--border-color) !important;
+        }
+        
+        [data-theme="dark"] .border-top {
+            border-top-color: var(--border-color) !important;
+        }
+        
+        [data-theme="dark"] .card-footer {
+            background-color: var(--bg-secondary) !important;
+            border-top-color: var(--border-color) !important;
+        }
+        
+        [data-theme="dark"] .card-footer.bg-white {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        [data-theme="dark"] .table-borderless td {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .receipt-preview-box {
+            background-color: var(--bg-tertiary) !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        [data-theme="dark"] .receipt-desc-box {
+            background-color: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+        }
+        
         [data-theme="dark"] .table-responsive {
             background: transparent;
         }
@@ -901,6 +942,13 @@
                         <span>Laporan</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.receipts.*') ? 'active' : '' }}" href="{{ route('admin.receipts.index') }}">
+                        <i class="fas fa-receipt"></i>
+                        <span>Kwitansi</span>
+                    </a>
+                </li>
                 
                 <li class="nav-item mt-4 desktop-only">
                     <a class="nav-link" href="{{ route('home') }}" target="_blank">
@@ -1001,6 +1049,7 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileMoreMenu">
             <li><a class="dropdown-item" href="{{ route('admin.reports.annual') }}"><i class="fas fa-chart-bar me-2"></i>Laporan</a></li>
+            <li><a class="dropdown-item" href="{{ route('admin.receipts.index') }}"><i class="fas fa-receipt me-2"></i>Kwitansi</a></li>
             <li><a class="dropdown-item" href="{{ route('home') }}" target="_blank"><i class="fas fa-external-link-alt me-2"></i>Lihat Website</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil</a></li>
