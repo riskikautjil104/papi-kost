@@ -12,6 +12,7 @@ use App\Http\Controllers\PaymentReceiptController;
 
 Route::prefix('user')->name('user.')->middleware(['auth', 'verified', 'user'])->group(function () {
     // Dashboard user
+    Route::get('/all-dues', [\App\Http\Controllers\AllDuesController::class, 'index'])->name('all-dues');
     Route::get('/dashboard', function () {
         $user = \App\Models\User::with('usersExtended')->where('id', auth()->id())->first();
 

@@ -946,6 +946,12 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('user.all-dues') ? 'active' : '' }}" href="{{ route('user.all-dues') }}">
+                        <i class="fas fa-users"></i>
+                        <span>Tunggakan Semua User</span>
+                    </a>
+                </li>
                 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('user.payments.*') ? 'active' : '' }}" href="{{ route('user.payments.history', auth()->user()->usersExtended->id ?? 0) }}">
@@ -1035,17 +1041,22 @@
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
-        
+
+        <a href="{{ route('user.all-dues') }}" class="bottom-nav-item {{ request()->routeIs('user.all-dues') ? 'active' : '' }}">
+            <i class="fas fa-users"></i>
+            <span>Tunggakan</span>
+        </a>
+
         <a href="{{ route('user.payments.history', auth()->user()->usersExtended->id ?? 0) }}" class="bottom-nav-item {{ request()->routeIs('user.payments.*') ? 'active' : '' }}">
             <i class="fas fa-history"></i>
             <span>Riwayat</span>
         </a>
-        
+
         <a href="{{ route('user.profile') }}" class="bottom-nav-item {{ request()->routeIs('user.profile') ? 'active' : '' }}">
             <i class="fas fa-user"></i>
             <span>Profil</span>
         </a>
-        
+
         <button class="bottom-nav-item" id="mobileMoreMenu" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fas fa-ellipsis-h"></i>
             <span>Lainnya</span>
